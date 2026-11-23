@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<script>(function(){var ua=navigator.userAgent||'';try{if(/KAKAOTALK/i.test(ua)){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(location.href);}else if(/ Line\//i.test(ua)&&location.search.indexOf('openExternalBrowser')<0){var h=location.hash||'';location.replace(location.origin+location.pathname+(location.search?location.search+'&':'?')+'openExternalBrowser=1'+h);}}catch(e){}})();</script>
 <script>try{var t=localStorage.getItem('tus-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
 </head><body><title>3Dho LAB</title>
@@ -177,7 +178,7 @@ svg text{fill:var(--muted);font-family:var(--f-num);font-size:12px}
     <div class="sync small muted" id="sync">저장 위치 확인 중…</div>
     <div class="seg" role="group" aria-label="화면 테마"><button type="button" data-th="system">시스템</button><button type="button" data-th="light">라이트</button><button type="button" data-th="dark">다크</button></div>
     <nav id="tabs">
-      <a href="#home">홈</a><a href="#plan">학습플랜</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#fill">빈칸 채우기</a><a href="#calc">계산문제</a><a href="#intro">계산 입문·기호 사전</a><a href="#records">기록·설정</a><a href="#install">홈 화면에 추가 방법</a>
+      <a href="#home">홈</a><a href="#plan">학습플랜</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#fill">빈칸 채우기</a><a href="#calc">계산문제</a><a href="#intro">계산 입문·기호 사전</a><a href="#records">기록·설정</a><a href="#install">홈 화면 추가 · 공유</a>
     </nav>
   </div>
   <div class="scrim" id="scrim"></div>
@@ -1728,6 +1729,7 @@ const ICON = {
   focus: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
   mock: '<path d="M8 4h8v3H8z"/><path d="M6 6H5v15h14V6h-1"/><path d="M9 14l2 2 4-4"/>',
   cards: '<rect x="3" y="7" width="14" height="12" rx="2"/><path d="M7 4h12a2 2 0 0 1 2 2v10"/>',
+  install: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',
   calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h0M16 11h0M8 15h2M12 15h0M16 15v3"/>',
 };
 const icon = k => `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
@@ -1755,7 +1757,7 @@ function viewHome(v) {
   v.append(p);
   const due = dueCards().length + Math.min(newCards().length, 30);
   const tiles = el('div', 'tiles');
-  [['plan', '학습플랜', `${planCfg().fit ? '시험일 맞춤' : planCfg().n + '일'} 플랜 · 오늘: ${esc(((planItem(today()) || {}).text || '플랜 밖').slice(0, 26))}`, 'wide'], ['notes', '핵심노트', `16편 · 완독 ${SUBKEYS.filter(k => S.notes[k]).length}`, 'wide'], ['bank', '문제모음', '모의고사 5회 · OX · 계산 · 세제·법규 집중', 'wide'], ['practice', '연습문제', '세부과목별 문제'], ['wrong', '오답노트', `${S.wrong.length}개 틀린 문제`], ['focus', '맞춤학습', '취약 세부과목 분석'], ['mock', '모의고사', '실전 100문항'], ['cards', '카드 복습', `오늘 ${due}장`], ['calc', '계산문제', `${GENS.length}개 유형`]]
+  [['plan', '학습플랜', `${planCfg().fit ? '시험일 맞춤' : planCfg().n + '일'} 플랜 · 오늘: ${esc(((planItem(today()) || {}).text || '플랜 밖').slice(0, 26))}`, 'wide'], ['notes', '핵심노트', `16편 · 완독 ${SUBKEYS.filter(k => S.notes[k]).length}`, 'wide'], ['bank', '문제모음', '모의고사 5회 · OX · 계산 · 세제·법규 집중', 'wide'], ['practice', '연습문제', '세부과목별 문제'], ['wrong', '오답노트', `${S.wrong.length}개 틀린 문제`], ['focus', '맞춤학습', '취약 세부과목 분석'], ['mock', '모의고사', '실전 100문항'], ['cards', '카드 복습', `오늘 ${due}장`], ['calc', '계산문제', `${GENS.length}개 유형`], ['install', '친구에게 공유', '링크·QR로 바로 설치', 'wide']]
     .forEach(([k, t, s, w]) => { const a = el('a', 'tile' + (w ? ' wide' : '')); a.href = '#' + k; a.innerHTML = `<div style="min-width:0"><b>${t}</b><span>${s}</span></div>${icon(k)}`; tiles.append(a); });
   v.append(tiles);
   viewHomeOld(v, true);
@@ -1965,7 +1967,19 @@ function installCard(full) {
   c.append(r); return c;
 }
 function shouldShowInstall() { if (isStandalone() || inFrame()) return false; try { if (localStorage.getItem('tus-install-off') || localStorage.getItem('tus-installed')) return false; if (Date.now() < (+localStorage.getItem('tus-install-later') || 0)) return false; } catch (e) { } return true; }
-function viewInstall(v) { head(v, '홈 화면에 추가 (앱처럼 쓰기)', isStandalone() ? '지금 홈 화면 앱으로 실행 중입니다. 다른 기기나 다른 분께 알려 줄 때 아래 안내를 쓰세요.' : ''); v.append(installCard(true)); }
+const SHARE_URL = 'https://nayajink-prog.github.io/3dho-lab/#install';
+function shareCard() {
+  const c = el('section', 'panel');
+  c.innerHTML = `<h3>다른 분께 공유하기</h3><p class="small" style="margin:0">아래 링크를 받은 분이 열면 바로 <b>홈 화면 추가 안내</b>가 뜹니다. 카카오톡·라인 안에서 열어도 자동으로 <b>사파리·크롬으로 다시 열려</b> 그대로 추가할 수 있습니다.</p><div class="num small" style="word-break:break-all;background:var(--sunk);border-radius:8px;padding:8px 10px">${SHARE_URL}</div>`;
+  const r = el('div', 'row');
+  const msg = '3Dho LAB · 투자자산운용사 학습앱입니다. 링크를 열고 안내대로 "홈 화면에 추가"를 누르면 앱처럼 쓸 수 있어요.';
+  if (navigator.share) r.append(btn('공유하기 (카톡·문자 등)', 'primary', async () => { try { await navigator.share({ title: '3Dho LAB', text: msg, url: SHARE_URL }); } catch (e) { } }));
+  const cp = btn('링크와 안내문 복사', navigator.share ? '' : 'primary', async () => { try { await navigator.clipboard.writeText(msg + '\n' + SHARE_URL); cp.textContent = '복사됨 · 붙여 넣어 보내세요'; } catch (e) { cp.textContent = '복사가 안 되면 위 주소를 길게 눌러 복사하세요'; } });
+  r.append(cp); c.append(r);
+  if (!inFrame()) c.insertAdjacentHTML('beforeend', `<details><summary class="small"><b>QR코드 보기</b> · 옆 사람 휴대폰 카메라로 찍게 하거나 PC 화면에 띄울 때</summary><img src="share-qr.png" alt="3Dho LAB 설치 안내 QR코드" width="300" height="380" style="display:block;margin:10px auto 0;max-width:100%;height:auto;border-radius:12px"></details>`);
+  return c;
+}
+function viewInstall(v) { head(v, '홈 화면 추가 · 공유', isStandalone() ? '지금 홈 화면 앱으로 실행 중입니다. 다른 기기나 다른 분께 알려 줄 때 아래를 쓰세요.' : '공유받은 링크로 들어오셨다면 아래 순서대로 홈 화면에 추가하세요.'); v.append(installCard(true)); v.append(shareCard()); }
 
 /* ===== 계산 입문 ===== */
 function viewIntro(v) {
