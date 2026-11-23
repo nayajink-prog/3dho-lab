@@ -156,6 +156,9 @@ a.link{color:var(--accent);font-weight:600;text-decoration:none}
 .oxstmt .lbl{display:block;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:8px}
 .oxhint{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
 .oxbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.steps ol{margin:0;padding-left:22px;display:grid;gap:8px;line-height:1.7}
+.oxbtns .opt > span{display:grid;justify-items:center}
+.oxsub{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:2px}
 .oxbtns .opt{justify-content:center;align-items:center;min-height:68px;font-size:26px;font-weight:700}
 .opts{gap:12px}
 .opt{padding:13px 14px;line-height:1.55}
@@ -174,7 +177,7 @@ svg text{fill:var(--muted);font-family:var(--f-num);font-size:12px}
     <div class="sync small muted" id="sync">저장 위치 확인 중…</div>
     <div class="seg" role="group" aria-label="화면 테마"><button type="button" data-th="system">시스템</button><button type="button" data-th="light">라이트</button><button type="button" data-th="dark">다크</button></div>
     <nav id="tabs">
-      <a href="#home">홈</a><a href="#plan">학습플랜</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#calc">계산문제</a><a href="#intro">계산 입문·기호 사전</a><a href="#records">기록·설정</a>
+      <a href="#home">홈</a><a href="#plan">학습플랜</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#calc">계산문제</a><a href="#intro">계산 입문·기호 사전</a><a href="#records">기록·설정</a><a href="#install">홈 화면에 추가 방법</a>
     </nav>
   </div>
   <div class="scrim" id="scrim"></div>
@@ -385,7 +388,7 @@ const BANK = [["TAX","다음 중 국세에 해당하지 않는 것은?",["소득
 ["ANA","산업 수명주기 중 경쟁이 치열해지고 성장률이 둔화되며 현금흐름이 안정되는 단계는?",["도입기","성장기","성숙기","쇠퇴기"],2,"성숙기에는 성장 둔화와 안정적 현금흐름이 특징입니다."],
 ["ANA","포터의 5가지 경쟁요인이 아닌 것은?",["신규 진입자의 위협","대체재의 위협","정부 보조금","공급자의 교섭력"],2,"5요인: 기존 경쟁, 신규 진입, 대체재, 구매자 교섭력, 공급자 교섭력입니다."],
 ["ANA","다우 이론에서 말하는 추세의 종류가 아닌 것은?",["주추세(장기)","2차 추세(중기)","소추세(단기)","계절 추세"],3,"다우 이론은 장기·중기·단기 3가지 추세로 나눕니다."],
-["ANA","고든모형에서 도출한 적정 PER이 높아지는 경우는?",["요구수익률 상승","배당성향 상승(다른 조건 동일)","성장률 하락","위험 증가"],1,"PER=(1−b)/(k−g). 다른 조건이 같다면 배당성향(1−b)이 클수록 PER이 높습니다."],
+["ANA","고든모형에서 도출한 적정 PER(P0/E1)을 높이는 요인은? (다른 조건 동일)",["요구수익률 상승","성장률 상승","위험 증가","이익 변동성 확대"],1,"PER = (1−b) ÷ (k−g)이므로 성장률 g가 오르거나 요구수익률 k가 내리면 PER이 높아집니다. 배당성향을 바꾸면 성장률(g = b × ROE)도 함께 변하므로 따로 판단해야 합니다."],
 ["RSK","델타-노말 VaR 계산에 필요한 요소가 아닌 것은?",["포지션 가치","수익률 표준편차","신뢰수준에 해당하는 z값","과거 배당성향"],3,"VaR=가치×z×σ×√t입니다."],
 ["RSK","99% 신뢰수준(단측)의 z값으로 옳은 것은?",["1.28","1.65","1.96","2.33"],3,"95%는 1.65, 99%는 2.33입니다."],
 ["RSK","1일 VaR을 이용해 10일 VaR을 구하는 방법은? (수익률 독립 가정)",["×10","×√10","÷√10","×100"],1,"보유기간이 늘면 √t배 합니다."],
@@ -553,7 +556,7 @@ const BANK = [["TAX","다음 중 국세에 해당하지 않는 것은?",["소득
 ["PERF","M²(Modigliani) 측정치에 대한 설명으로 옳은 것은?",["샤프지수와 순위가 같고 수익률 단위로 표시된다","베타로 나눈다","추적오차만 쓴다","트레이너와 항상 같다"],0,"포트폴리오 위험을 시장 수준으로 맞췄을 때의 수익률로 비교합니다."],
 ["PERF","젠센의 알파가 음(−)이라는 의미는?",["CAPM 기대수익률보다 낮은 수익을 냈다","시장보다 위험이 낮다","샤프지수가 높다","운용을 잘했다"],0,"위험을 감안하면 기대보다 못한 성과입니다."],
 ["PERF","종목선택 효과가 양(+)이라는 의미는?",["자산군 비중을 잘 정했다","같은 자산군 안에서 벤치마크보다 좋은 종목을 골랐다","현금 비중이 높았다","시장이 올랐다"],1,"비중 결정의 효과는 자산배분 효과입니다."],
-["PERF","샤프지수 해석 시 주의할 점으로 옳은 것은?",["음수일 때도 높을수록 항상 좋다고 단정하기 어렵다","표준편차가 없으면 계산할 수 있다","베타가 필요하다","벤치마크가 반드시 필요하다"],0,"초과수익이 음수일 때는 위험이 클수록 지수가 덜 나빠 보이는 왜곡이 생길 수 있습니다."],
+["PERF","샤프지수 해석 시 주의할 점으로 옳은 것은?",["초과수익(Rp−Rf)이 음수일 때는 순위 해석에 주의해야 한다","표준편차 없이도 계산할 수 있다","분모에 베타를 쓴다","벤치마크 지수가 반드시 필요하다"],0,"초과수익이 음수일 때는 위험이 클수록 지수가 덜 나빠 보이는 왜곡이 생길 수 있습니다."],
 ["MAC","GDP 디플레이터의 계산식은?",["실질 GDP ÷ 명목 GDP × 100","명목 GDP ÷ 실질 GDP × 100","명목 GDP − 실질 GDP","소비자물가지수 × 100"],1,"경제 전체의 물가 수준을 보여 줍니다."],
 ["MAC","다음 중 경기선행지수 구성지표는?",["비농림어업취업자수","광공업생산지수","코스피(KOSPI)","CP유통수익률"],2,"취업자수·광공업생산은 동행, CP유통수익률은 후행지표입니다."],
 ["MAC","확장적 통화정책의 일반적 효과는?",["금리 상승, 투자 감소","금리 하락, 투자 증가","환율 하락만 발생","물가 하락"],1,"통화량 증가로 금리가 내려 투자·소비가 늘어납니다."],
@@ -756,7 +759,7 @@ const BANK = [["TAX","다음 중 국세에 해당하지 않는 것은?",["소득
 ["PRD","ETN과 ETF의 차이로 옳은 것은?",["ETN은 신탁재산이 분리 보관된다","ETN은 증권사가 발행하는 무보증 채무증권으로 발행사 신용위험이 있다","ETF는 발행사 신용위험만 있다","둘 다 예금자보호 대상이다"],1,"ETF는 펀드이므로 자산이 신탁업자에 분리 보관됩니다."],
 ["PRD","원금보장형 주가연계 상품으로 사채 형태인 것은?",["ELB(주가연계 파생결합사채)","ELW","ETN","CMA"],0,"ELB는 원금지급형이지만 발행사 신용위험이 있습니다."],
 ["PRD","확정급여형(DB) 퇴직연금에 대한 설명으로 옳은 것은?",["근로자가 직접 운용하고 결과에 책임진다","회사가 적립금을 운용하고 근로자는 정해진 퇴직급여를 받는다","개인이 별도로 가입하는 연금이다","세제 혜택이 없다"],1,"확정기여형(DC)은 근로자가 운용하고 결과에 따라 급여가 달라집니다."],
-["PRD","현재 신규 가입이 가능한 연금저축 상품이 아닌 것은?",["연금저축펀드","연금저축보험","연금저축신탁","(모두 가능)"],2,"연금저축신탁은 2018년부터 신규 판매가 중단되었습니다."],
+["PRD","현재 신규 가입이 가능한 연금저축 상품이 아닌 것은?",["연금저축펀드","연금저축보험","연금저축신탁","연금저축펀드(ETF 투자형)"],2,"연금저축신탁은 2018년부터 신규 판매가 중단되었습니다."],
 ["PRD","변액보험에 대한 설명으로 옳은 것은?",["보험금이 항상 고정된다","보험료 일부를 펀드로 운용해 투자 실적에 따라 보험금·해지환급금이 달라진다","원금이 보장되는 예금이다","단기 저축상품이다"],1,"투자 실적에 따른 위험을 계약자가 부담합니다."],
 ["PRD","부동산신탁의 종류가 아닌 것은?",["담보신탁","관리신탁","처분신탁","특정금전신탁"],3,"특정금전신탁은 금전신탁입니다. 부동산신탁에는 개발(토지)신탁도 있습니다."],
 ["PRD","자산유동화증권(ABS)에 대한 설명으로 옳은 것은?",["회사 신용만으로 발행한다","대출채권 등 자산을 특수목적회사(SPC)에 양도하고 그 현금흐름을 기초로 발행한다","주식의 일종이다","예금자보호 대상이다"],1,"자산보유자의 신용과 분리된 구조로 자금을 조달합니다."],
@@ -1113,46 +1116,49 @@ const EASY = {
   fisher: ['명목금리 ≈ 실질금리 + 기대 물가상승률', '통장 금리가 5%여도 물가가 3% 오르면 실제로 늘어난 구매력은 약 2%입니다.'],
 };
 const GLOSSARY = [
-  ['r, y', '수익률·금리', 'y는 채권의 만기수익률(YTM). 5%는 0.05로 계산'],
-  ['C, F', '이자(쿠폰)·액면', '매년 받는 이자와 만기에 돌려받는 원금'],
-  ['t, n', '기간', 't는 몇 번째 해, n은 만기까지 햇수'],
-  ['D, MD', '듀레이션·수정듀레이션', '평균 회수 기간 / 금리 1%p당 가격 변화율'],
-  ['Δ (델타)', '변화량', 'Δy는 금리가 얼마나 변했는지 (예: +0.01 = 1%p)'],
-  ['σ (시그마)', '표준편차 = 흔들림의 크기', '수익률이 평균에서 얼마나 출렁이는지. 위험의 크기'],
-  ['σ²', '분산', '표준편차를 제곱한 값'],
-  ['ρ (로)', '상관계수', '+1 같이 움직임, 0 무관, −1 정반대로 움직임'],
-  ['Cov', '공분산', '두 자산이 같이 움직이는 정도(크기 포함). ρ × σA × σB'],
-  ['β (베타)', '시장 민감도', '시장이 1% 움직일 때 몇 % 움직이나'],
-  ['Rf', '무위험수익률', '예금·국채처럼 손실 위험이 없는 수익률'],
-  ['Rm, Rp', '시장·포트폴리오 수익률', 'm은 market, p는 portfolio'],
-  ['E(R)', '기대수익률', '평균적으로 기대하는 수익률'],
-  ['α (알파)', '초과 성과', '위험을 감안하고도 더 번 수익'],
-  ['k', '요구수익률', '투자자가 이 정도는 벌어야 한다고 보는 수익률'],
-  ['g', '성장률', '배당이나 이익이 매년 늘어나는 비율'],
-  ['b', '유보율', '이익 중 배당하지 않고 회사에 남기는 비율 (1 − 배당성향)'],
-  ['D0, D1', '올해 배당·내년 배당', 'D1 = D0 × (1 + g)'],
-  ['S, K', '현재 가격·행사가격', 'S는 주가(현물), K는 옵션 행사가격'],
-  ['C, P (옵션)', '콜·풋 가격', '콜은 살 권리, 풋은 팔 권리의 가격(프리미엄)'],
-  ['z', '신뢰수준 숫자', '95% → 1.65, 99% → 2.33 (외우면 끝)'],
-  ['√t', '기간의 제곱근', '기간이 4배면 위험은 2배, 9배면 3배'],
-  ['w', '비중', '포트폴리오에서 차지하는 비율 (60% = 0.6)'],
-  ['NOI', '순영업소득', '임대수입 − 공실 손실 − 운영비'],
-  ['EAD·PD·LGD', '익스포저·부도확률·손실률', '빌려준 돈, 떼일 확률, 떼였을 때 못 받는 비율'],
-  ['ROE', '자기자본이익률', '내 돈(자본)으로 1년에 몇 % 벌었나'],
+  ['r, y', '알, 와이', '수익률·금리', 'y는 채권의 만기수익률(YTM). 5%는 0.05로 계산'],
+  ['C, F', '씨, 에프', '이자(쿠폰)·액면', '매년 받는 이자와 만기에 돌려받는 원금'],
+  ['t, n', '티, 엔', '기간', 't는 몇 번째 해, n은 만기까지 햇수'],
+  ['(1+r)^t', '일 더하기 알의 티 제곱', '거듭제곱', '(1+r)을 t번 곱한다는 뜻. ^는 "제곱(승)"으로 읽음'],
+  ['D, MD', '디, 엠디', '듀레이션·수정듀레이션', '평균 회수 기간 / 금리 1%p당 가격 변화율'],
+  ['Δ', '델타', '변화량', 'Δy는 "델타 와이" = 금리가 얼마나 변했는지 (예: +0.01 = 1%p)'],
+  ['Σ', '시그마 (대문자)', '모두 더하기', 'Σ(t×PV)는 "t 곱하기 PV를 모두 더한 값"'],
+  ['σ', '시그마 (소문자)', '표준편차 = 흔들림의 크기', '수익률이 평균에서 얼마나 출렁이는지. 위험의 크기'],
+  ['σ²', '시그마 제곱', '분산', '표준편차를 제곱한 값'],
+  ['ρ', '로', '상관계수', '+1 같이 움직임, 0 무관, −1 정반대로 움직임'],
+  ['Cov', '코브 (코배리언스)', '공분산', '두 자산이 같이 움직이는 정도(크기 포함). ρ × σA × σB'],
+  ['β', '베타', '시장 민감도', '시장이 1% 움직일 때 몇 % 움직이나'],
+  ['α', '알파', '초과 성과', '위험을 감안하고도 더 번 수익'],
+  ['Rf', '알 에프', '무위험수익률', 'f는 free(위험 없음). 예금·국채 금리'],
+  ['Rm, Rp', '알 엠, 알 피', '시장·포트폴리오 수익률', 'm은 market, p는 portfolio'],
+  ['E(R)', '이 알 (기대 알)', '기대수익률', 'E는 Expected. 평균적으로 기대하는 수익률'],
+  ['k', '케이', '요구수익률', '투자자가 이 정도는 벌어야 한다고 보는 수익률'],
+  ['g', '지', '성장률', 'growth. 배당이나 이익이 매년 늘어나는 비율'],
+  ['b', '비', '유보율', '이익 중 배당하지 않고 회사에 남기는 비율 (1 − 배당성향)'],
+  ['D0, D1', '디 제로, 디 원', '올해 배당·내년 배당', 'D1 = D0 × (1 + g)'],
+  ['S, K', '에스, 케이', '현재 가격·행사가격', 'S는 주가(현물, Spot), K는 옵션 행사가격'],
+  ['C, P (옵션)', '씨, 피', '콜·풋 가격', '콜(Call)은 살 권리, 풋(Put)은 팔 권리의 가격(프리미엄)'],
+  ['z', '제트 (지)', '신뢰수준 숫자', '95% → 1.65, 99% → 2.33 (외우면 끝)'],
+  ['√t', '루트 티', '기간의 제곱근', '기간이 4배면 위험은 2배(√4), 9배면 3배(√9)'],
+  ['w', '더블유', '비중', 'weight. 포트폴리오에서 차지하는 비율 (60% = 0.6)'],
+  ['≈', '약 (근사)', '거의 같다', '정확한 값은 아니지만 시험에서는 이 식으로 계산'],
+  ['NOI', '엔오아이', '순영업소득', 'Net Operating Income. 임대수입 − 공실 손실 − 운영비'],
+  ['EAD·PD·LGD', '이에이디·피디·엘지디', '익스포저·부도확률·손실률', '빌려준 돈, 떼일 확률, 떼였을 때 못 받는 비율'],
+  ['ROE', '알오이', '자기자본이익률', 'Return On Equity. 내 돈(자본)으로 1년에 몇 % 벌었나'],
+  ['VaR', '밸류앳리스크 (바)', '손실 한도', 'Value at Risk. 정상 시장에서 이 정도 안에서 잃는다는 금액'],
 ];
 const LESSONS = [
-  { t: '지금 돈과 미래 돈', story: '오늘 1만 원과 1년 뒤 1만 원은 가치가 다릅니다. 오늘 받은 돈은 예금에 넣으면 이자가 붙기 때문입니다.', word: '지금 가치 = 미래 돈 ÷ (1 + 금리) — 2년 뒤면 (1 + 금리)로 두 번 나눕니다', ex: '금리 5%, 1년 뒤 10,500원 → 10,500 ÷ 1.05 = 10,000원', sym: 'PV = CF ÷ (1+r)^t', gens: ['bondPrice', 'gordon', 'cap'] },
-  { t: '수익률을 평균 내는 법', story: '+50% 다음 −50%면 단순 평균은 0%지만, 100만 원이 75만 원이 됩니다. 수익률은 "곱해서" 평균 내야 합니다.', word: '연평균 = 각 해 (1+수익률)을 곱하고 → 햇수만큼 제곱근 → 1 빼기', ex: '(1.5 × 0.5) = 0.75 → √0.75 = 0.866 → 연 −13.4%', sym: '[(1+r1)(1+r2)]^(1/2) − 1', gens: ['geo', 'fx', 'fisher'] },
-  { t: '위험 = 흔들림, 그리고 분산투자', story: '위험은 "수익률이 얼마나 출렁이나"로 잽니다(표준편차 σ). 반대로 움직이는 자산을 섞으면 출렁임이 서로 상쇄됩니다.', word: '섞은 위험은 각자 위험의 가중평균보다 작다 — 같이 안 움직일수록 더 작아진다', ex: '위험 20%·10% 자산을 반반, 상관 0 → √(0.01+0.0025) = 11.2% (단순 평균 15%보다 작음)', sym: 'σp² = w1²σ1² + w2²σ2² + 2w1w2ρσ1σ2', gens: ['port', 'minvar'] },
-  { t: '베타와 CAPM', story: '시장이 10% 오를 때 15% 오르는 주식은 베타 1.5입니다. 더 흔들리는 만큼 더 높은 수익을 기대해야 공평하겠죠.', word: '기대수익률 = 예금 금리 + 베타 × (시장 수익률 − 예금 금리)', ex: '예금 3%, 시장 8%, 베타 1.2 → 3 + 1.2 × 5 = 9%', sym: 'E(R) = Rf + β(Rm − Rf)', gens: ['beta', 'capm'] },
-  { t: '위험 대비 성과 비교', story: '두 펀드가 모두 12%를 벌었어도, 위험을 덜 진 펀드가 운용을 더 잘한 것입니다.', word: '(내 수익 − 예금 금리)를 위험으로 나눈다 — 나누는 위험이 전체면 샤프, 베타면 트레이너', ex: '수익 12%, 예금 3%, 위험 15% → (12−3) ÷ 15 = 0.6', sym: '샤프 (Rp−Rf)/σ, 트레이너 (Rp−Rf)/β, 젠센 α = Rp − [Rf + β(Rm−Rf)]', gens: ['perf'] },
-  { t: '금리와 채권 가격', story: '금리가 오르면 이미 가진 채권(낮은 이자)은 인기가 떨어져 값이 내립니다. 만기가 길수록 더 크게 흔들립니다.', word: '가격 변화율 ≈ −(수정듀레이션) × 금리 변화', ex: '수정듀레이션 4, 금리 +1%p → 가격 약 −4%', sym: 'ΔP/P ≈ −MD × Δy, MD = D ÷ (1+y)', gens: ['macDur', 'priceChg', 'cb'] },
-  { t: '선물과 옵션 첫걸음', story: '선물은 "나중에 이 가격에 사고팔기로 지금 약속", 옵션은 "사고팔 권리"를 돈(프리미엄) 주고 사는 것입니다.', word: '선물 가격 = 지금 가격 + 이자 − 배당 / 옵션 매수 본전 = 행사가격 ± 프리미엄', ex: '행사가 100인 콜을 5에 샀다 → 105는 넘어야 이익', sym: 'F = S[1+(r−d)t], C + K/(1+r) = P + S', gens: ['futures', 'breakeven', 'pcp', 'hedgeN', 'hRatio'] },
-  { t: '손실 한도 VaR과 신용 손실', story: '"운 나쁜 날에도 이 정도까지만 잃는다"를 숫자로 정하는 것이 VaR입니다. 대출은 "평균적으로 이만큼 떼인다"를 미리 계산합니다.', word: 'VaR = 금액 × 1.65(95%) 또는 2.33(99%) × 하루 변동성 × √기간', ex: '100억, 하루 변동성 1%, 99%, 1일 → 100 × 2.33 × 0.01 = 2.33억', sym: 'VaR = V·z·σ·√t, EL = EAD × PD × LGD', gens: ['var', 'pvar', 'el'] },
-  { t: '기업 가치 보는 법', story: '주가가 비싼지 싼지는 이익(PER), 자본(PBR), 배당(배당할인모형)과 비교해서 봅니다.', word: 'ROE = 이익률 × 회전율 × 레버리지 / PBR = PER × ROE / 주가 = 내년 배당 ÷ (원하는 수익률 − 성장률)', ex: '내년 배당 1,000원, 원하는 수익률 9%, 성장 4% → 1,000 ÷ 0.05 = 20,000원', sym: 'P0 = D1/(k−g), g = b × ROE', gens: ['dupont', 'per', 'pbr', 'ev', 'quick'] },
-  { t: '부동산과 원금 지키기 전략', story: '건물 값은 "1년에 얼마 남나"로 정하고, CPPI는 "꼭 지킬 돈"을 남겨 두고 여유분만큼만 공격적으로 투자합니다.', word: '건물 가치 = 1년 순수익 ÷ 환원이율 / 주식 투자액 = 승수 × (재산 − 지킬 돈)', ex: '순수익 5억, 환원이율 5% → 100억', sym: 'V = NOI ÷ R, 위험자산 = m × (V − F)', gens: ['cap', 'dscr', 'cppi'] },
+  { t: '지금 돈과 미래 돈', story: '오늘 1만 원과 1년 뒤 1만 원은 가치가 다릅니다. 오늘 받은 돈은 예금에 넣으면 이자가 붙기 때문입니다.', word: '지금 가치 = 미래 돈 ÷ (1 + 금리) — 2년 뒤면 (1 + 금리)로 두 번 나눕니다', ex: '금리 5%, 1년 뒤 10,500원 → 10,500 ÷ 1.05 = 10,000원', sym: 'PV = CF ÷ (1+r)^t', read: '피브이는 씨에프 나누기, 일 더하기 알의 티 제곱', gens: ['bondPrice', 'gordon', 'cap'] },
+  { t: '수익률을 평균 내는 법', story: '+50% 다음 −50%면 단순 평균은 0%지만, 100만 원이 75만 원이 됩니다. 수익률은 "곱해서" 평균 내야 합니다.', word: '연평균 = 각 해 (1+수익률)을 곱하고 → 햇수만큼 제곱근 → 1 빼기', ex: '(1.5 × 0.5) = 0.75 → √0.75 = 0.866 → 연 −13.4%', sym: '[(1+r1)(1+r2)]^(1/2) − 1', read: '일 더하기 알원, 곱하기 일 더하기 알투를 루트 씌우고 빼기 일', gens: ['geo', 'fx', 'fisher'] },
+  { t: '위험 = 흔들림, 그리고 분산투자', story: '위험은 "수익률이 얼마나 출렁이나"로 잽니다(표준편차 σ). 반대로 움직이는 자산을 섞으면 출렁임이 서로 상쇄됩니다.', word: '섞은 위험은 각자 위험의 가중평균보다 작다 — 같이 안 움직일수록 더 작아진다', ex: '위험 20%·10% 자산을 반반, 상관 0 → √(0.01+0.0025) = 11.2% (단순 평균 15%보다 작음)', sym: 'σp² = w1²σ1² + w2²σ2² + 2w1w2ρσ1σ2', read: '시그마피 제곱은 더블유원 제곱 시그마원 제곱 더하기 더블유투 제곱 시그마투 제곱 더하기 이 더블유원 더블유투 로 시그마원 시그마투', gens: ['port', 'minvar'] },
+  { t: '베타와 CAPM', story: '시장이 10% 오를 때 15% 오르는 주식은 베타 1.5입니다. 더 흔들리는 만큼 더 높은 수익을 기대해야 공평하겠죠.', word: '기대수익률 = 예금 금리 + 베타 × (시장 수익률 − 예금 금리)', ex: '예금 3%, 시장 8%, 베타 1.2 → 3 + 1.2 × 5 = 9%', sym: 'E(R) = Rf + β(Rm − Rf)', read: '이알은 알에프 더하기 베타 곱하기 (알엠 빼기 알에프)', gens: ['beta', 'capm'] },
+  { t: '위험 대비 성과 비교', story: '두 펀드가 모두 12%를 벌었어도, 위험을 덜 진 펀드가 운용을 더 잘한 것입니다.', word: '(내 수익 − 예금 금리)를 위험으로 나눈다 — 나누는 위험이 전체면 샤프, 베타면 트레이너', ex: '수익 12%, 예금 3%, 위험 15% → (12−3) ÷ 15 = 0.6', sym: '샤프 (Rp−Rf)/σ, 트레이너 (Rp−Rf)/β, 젠센 α = Rp − [Rf + β(Rm−Rf)]', read: '샤프는 (알피 빼기 알에프) 나누기 시그마, 트레이너는 같은 분자를 베타로 나눔, 알파는 알피 빼기 CAPM 기대수익률', gens: ['perf'] },
+  { t: '금리와 채권 가격', story: '금리가 오르면 이미 가진 채권(낮은 이자)은 인기가 떨어져 값이 내립니다. 만기가 길수록 더 크게 흔들립니다.', word: '가격 변화율 ≈ −(수정듀레이션) × 금리 변화', ex: '수정듀레이션 4, 금리 +1%p → 가격 약 −4%', sym: 'ΔP/P ≈ −MD × Δy, MD = D ÷ (1+y)', read: '델타피 나누기 피는 약 마이너스 엠디 곱하기 델타와이, 엠디는 디 나누기 일 더하기 와이', gens: ['macDur', 'priceChg', 'cb'] },
+  { t: '선물과 옵션 첫걸음', story: '선물은 "나중에 이 가격에 사고팔기로 지금 약속", 옵션은 "사고팔 권리"를 돈(프리미엄) 주고 사는 것입니다.', word: '선물 가격 = 지금 가격 + 이자 − 배당 / 옵션 매수 본전 = 행사가격 ± 프리미엄', ex: '행사가 100인 콜을 5에 샀다 → 105는 넘어야 이익', sym: 'F = S[1+(r−d)t], C + K/(1+r) = P + S', read: '에프는 에스 곱하기 (일 더하기 (알 빼기 디) 곱하기 티), 씨 더하기 케이의 현재가치는 피 더하기 에스', gens: ['futures', 'breakeven', 'pcp', 'hedgeN', 'hRatio'] },
+  { t: '손실 한도 VaR과 신용 손실', story: '"운 나쁜 날에도 이 정도까지만 잃는다"를 숫자로 정하는 것이 VaR입니다. 대출은 "평균적으로 이만큼 떼인다"를 미리 계산합니다.', word: 'VaR = 금액 × 1.65(95%) 또는 2.33(99%) × 하루 변동성 × √기간', ex: '100억, 하루 변동성 1%, 99%, 1일 → 100 × 2.33 × 0.01 = 2.33억', sym: 'VaR = V·z·σ·√t, EL = EAD × PD × LGD', read: '바는 브이 곱하기 제트 곱하기 시그마 곱하기 루트 티, 이엘은 이에이디 곱하기 피디 곱하기 엘지디', gens: ['var', 'pvar', 'el'] },
+  { t: '기업 가치 보는 법', story: '주가가 비싼지 싼지는 이익(PER), 자본(PBR), 배당(배당할인모형)과 비교해서 봅니다.', word: 'ROE = 이익률 × 회전율 × 레버리지 / PBR = PER × ROE / 주가 = 내년 배당 ÷ (원하는 수익률 − 성장률)', ex: '내년 배당 1,000원, 원하는 수익률 9%, 성장 4% → 1,000 ÷ 0.05 = 20,000원', sym: 'P0 = D1/(k−g), g = b × ROE', read: '피제로는 디원 나누기 (케이 빼기 지), 지는 비 곱하기 알오이', gens: ['dupont', 'per', 'pbr', 'ev', 'quick'] },
+  { t: '부동산과 원금 지키기 전략', story: '건물 값은 "1년에 얼마 남나"로 정하고, CPPI는 "꼭 지킬 돈"을 남겨 두고 여유분만큼만 공격적으로 투자합니다.', word: '건물 가치 = 1년 순수익 ÷ 환원이율 / 주식 투자액 = 승수 × (재산 − 지킬 돈)', ex: '순수익 5억, 환원이율 5% → 100억', sym: 'V = NOI ÷ R, 위험자산 = m × (V − F)', read: '브이는 엔오아이 나누기 알(환원이율), 위험자산은 엠(승수) 곱하기 (브이 빼기 에프(최저보장))', gens: ['cap', 'dscr', 'cppi'] },
 ];
-
 </script>
 <script>
 /* ===== 기본 데이터 ===== */
@@ -1198,7 +1204,8 @@ function presentBank(q, rnd = Math.random) { const ord = shuffle([0, 1, 2, 3], r
 function calcFor(sub, rnd) { const gens = GENS.filter(g => g.sub === sub); if (!gens.length) return null; const prev = RNG; if (rnd) RNG = rnd; try { const g = gens[Math.floor((rnd || Math.random)() * gens.length)]; return buildCalc(g); } finally { RNG = prev; } }
 function calcById(id, rnd) { const g = GENS.find(x => x.id === id); const prev = RNG; if (rnd) RNG = rnd; try { return buildCalc(g); } finally { RNG = prev; } }
 /* OX: 보기마다 참/거짓 문장 생성 */
-const OXQ = []; BANKQ.forEach(q => { const neg = /않은|아닌|아니한|않는/.test(q.q); q.opts.forEach((o, i) => OXQ.push({ id: q.id + '-' + i, sub: q.sub, q: q.q.replace(/\s*\(.*?\)\s*$/, ''), stmt: o, truth: neg ? i !== q.a : i === q.a, exp: q.exp, ans: q.opts[q.a], neg })); });
+/* OX: 문제마다 정답 보기 1개 + 오답 보기 1개를 골라 "이 보기가 정답인가?"를 묻는다 (규칙은 하나, O·X 반반) */
+const OXQ = []; { const rr = mulberry(777); BANKQ.forEach(q => { const wrongs = [0, 1, 2, 3].filter(i => i !== q.a); const w = wrongs[Math.floor(rr() * wrongs.length)]; [q.a, w].forEach(i => OXQ.push({ id: q.id + '-' + i, sub: q.sub, q: q.q, stmt: q.opts[i], truth: i === q.a, exp: q.exp, ans: q.opts[q.a] })); }); }
 const OX_ORDER = shuffle(OXQ, mulberry(4242)); const OX_SETS = Math.ceil(OX_ORDER.length / OX_SIZE);
 
 /* ===== 상태·저장 ===== */
@@ -1255,7 +1262,7 @@ function progressAll() { const doneB = new Set(); Object.values(S.prac).forEach(
 function studyMin(day) { let m = day ? (S.study[day] || 0) : Object.values(S.study).reduce((a, b) => a + b, 0); if (S.timer) { const live = (Date.now() - S.timer) / 6e4; if (!day || day === today()) m += live; } return m; }
 
 /* ===== 라우팅 ===== */
-const ROUTES = { home: viewHome, intro: viewIntro, plan: viewPlan, bank: viewBank, focus: viewFocus, practice: viewPractice, mock: viewMock, ox: viewOX, calc: viewCalc, notes: viewNotes, cards: viewCards, wrong: viewWrong, records: viewRecords };
+const ROUTES = { home: viewHome, install: viewInstall, intro: viewIntro, plan: viewPlan, bank: viewBank, focus: viewFocus, practice: viewPractice, mock: viewMock, ox: viewOX, calc: viewCalc, notes: viewNotes, cards: viewCards, wrong: viewWrong, records: viewRecords };
 let session = null; // 진행 중인 풀이 세션
 function go(h) { if (location.hash !== '#' + h) location.hash = h; else render(); }
 function render() {
@@ -1287,9 +1294,9 @@ function drawRun() {
   const q = s.qs[s.i], box = el('section', 'panel');
   box.innerHTML = `<div class="row small muted"><span>${esc(s.title || '')}</span><span class="pill info">${esc(SUBS[q.sub][0])}</span>${q.calc ? '<span class="pill warn">계산</span>' : ''}<span style="margin-left:auto" class="num">${s.i + 1} / ${s.qs.length}</span></div>`;
   if (q.ox) {
-    box.insertAdjacentHTML('beforeend', `<div class="oxq"><div class="q">${esc(q.q)}</div><div class="oxstmt"><span class="lbl">보기</span>${esc(q.stmt)}</div><p class="oxhint">이 보기가 질문에 대해 ${q.neg ? '<b>옳은 내용</b>(정답이 아닌 보기)' : '<b>정답</b>'}이면 O, 아니면 X</p></div>`);
+    box.insertAdjacentHTML('beforeend', `<div class="oxq"><div class="q">${esc(q.q)}</div><div class="oxstmt"><span class="lbl">보기</span>${esc(q.stmt)}</div><p class="oxhint">이 보기가 위 질문의 <b>정답</b>이면 O, 정답이 아니면 X</p></div>`);
     const row = el('div', 'oxbtns');
-    [['O', true], ['X', false]].forEach(([t, val]) => { const b = btn(t, 'opt', () => answer(val === q.truth, b, row)); row.append(b); });
+    [['O', true, '정답이다'], ['X', false, '정답 아니다']].forEach(([t, val, s]) => { const b = btn('', 'opt', () => answer(val === q.truth, b, row)); b.innerHTML = `<span>${t}<small class="oxsub">${s}</small></span>`; row.append(b); });
     box.append(row);
   } else {
     box.insertAdjacentHTML('beforeend', `<div class="q">${esc(q.q)}</div>`);
@@ -1347,6 +1354,7 @@ const icon = k => `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" s
 function viewHome(v) {
   const d = today(), dd = daysBetween(d, S.examDate), td = S.daily[d] || { n: 0, c: 0 }, pr = progressAll();
   const greet = el('div'); greet.innerHTML = `<h2 style="font-size:22px">오늘도 한 문제씩</h2><p class="muted" style="margin:2px 0 0">${dd > 0 ? `시험까지 <b class="num" style="color:var(--accent)">D-${dd}</b> · ` : ''}오늘 계획: ${esc((planItem(d) || {}).text || '약점 세부과목 연습')} <a class="link" href="#plan">플랜 보기 →</a></p>`; v.append(greet);
+  if (shouldShowInstall()) v.append(installCard(false));
   const p = el('section', 'panel');
   let wn = 0, wc = 0; weekDays().forEach(x => { const y = S.daily[x]; if (y) { wn += y.n; wc += y.c; } });
   const wmin = weekDays().reduce((a, x) => a + studyMin(x), 0), tmin = studyMin(d), all = studyMin();
@@ -1548,6 +1556,34 @@ function showMockResult(r) {
   v.append(list); window.scrollTo(0, 0);
 }
 
+/* ===== 홈 화면 등록 안내 ===== */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; const h = location.hash || '#home'; if (h.startsWith('#home') || h.startsWith('#install')) render(); });
+window.addEventListener('appinstalled', () => { deferredPrompt = null; try { localStorage.setItem('tus-installed', '1'); } catch (e) { } render(); });
+function isStandalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+function inFrame() { try { return window.self !== window.top; } catch (e) { return true; } }
+function platform() { const ua = navigator.userAgent || ''; const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); return { ios, android: /Android/.test(ua), inapp: /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua), iosOther: ios && /CriOS|FxiOS|EdgiOS|Whale/i.test(ua) }; }
+function installSteps() {
+  const p = platform(), share = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px" aria-label="공유"><path d="M12 3v12M8 7l4-4 4 4"/><rect x="5" y="10" width="14" height="11" rx="2"/></svg>';
+  if (p.inapp) return `<ol><li><b>지금은 카카오톡 같은 앱 안의 브라우저</b>라 홈 화면에 추가할 수 없습니다.</li><li>화면의 <b>⋯ 메뉴 → 다른 브라우저로 열기</b>를 누르세요. 아이폰은 <b>Safari</b>, 안드로이드는 <b>Chrome</b>.</li><li>새로 열린 화면에서 이 안내를 다시 따라 하면 됩니다.</li></ol>`;
+  if (p.iosOther) return `<ol><li>아이폰은 <b>Safari</b>에서 추가하는 것이 가장 확실합니다. 아래 <b>주소 복사</b>를 누르고 Safari에 붙여 넣어 여세요.</li><li>Safari의 <b>공유 버튼 ${share}</b> → <b>홈 화면에 추가</b> → <b>추가</b>.</li></ol>`;
+  if (p.ios) return `<ol><li>Safari 화면 아래(또는 위)의 <b>공유 버튼 ${share}</b>을 누릅니다.</li><li>메뉴를 아래로 내려 <b>홈 화면에 추가</b>를 누릅니다.</li><li>이름이 <b>3Dho LAB</b>인지 확인하고 오른쪽 위 <b>추가</b>를 누르면 끝입니다.</li></ol>`;
+  if (p.android) return `<ol><li><b>Chrome</b> 오른쪽 위 <b>⋮</b> 메뉴를 누릅니다.</li><li><b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 누릅니다.</li><li><b>설치</b>(또는 추가)를 누르면 홈 화면에 3Dho LAB 아이콘이 생깁니다.</li></ol>`;
+  return `<ol><li>PC에서는 <b>Chrome·Edge</b> 주소창 오른쪽의 <b>설치 아이콘</b>을 누르면 프로그램처럼 쓸 수 있습니다.</li><li>휴대폰에서 쓰려면 <b>주소 복사</b> 후 휴대폰으로 보내 열고, 이 안내를 따라 하세요.</li></ol>`;
+}
+function installCard(full) {
+  const c = el('section', 'panel'); c.style.borderColor = 'var(--accent)';
+  c.innerHTML = `<div class="row"><h3>홈 화면에 3Dho LAB 추가하기</h3>${full ? '' : '<span class="pill info" style="margin-left:auto">1분</span>'}</div><p class="small" style="margin:0">추가하면 앱처럼 아이콘을 눌러 바로 열리고, 인터넷이 없어도 열립니다. 앱스토어 설치나 로그인은 필요 없습니다.</p><div class="steps">${installSteps()}</div>`;
+  const r = el('div', 'row');
+  if (deferredPrompt) r.append(btn('지금 설치하기', 'primary', async () => { const p = deferredPrompt; deferredPrompt = null; try { p.prompt(); await p.userChoice; } catch (e) { } render(); }));
+  const url = location.origin + location.pathname;
+  const cp = btn('주소 복사', '', async () => { try { await navigator.clipboard.writeText(url); cp.textContent = '복사됨'; } catch (e) { cp.textContent = url; } }); r.append(cp);
+  if (!full) r.append(btn('나중에', 'ghost', () => { try { localStorage.setItem('tus-install-later', String(Date.now() + 3 * 864e5)); } catch (e) { } render(); }), btn('다시 보지 않기', 'ghost', () => { try { localStorage.setItem('tus-install-off', '1'); } catch (e) { } render(); }));
+  c.append(r); return c;
+}
+function shouldShowInstall() { if (isStandalone() || inFrame()) return false; try { if (localStorage.getItem('tus-install-off') || localStorage.getItem('tus-installed')) return false; if (Date.now() < (+localStorage.getItem('tus-install-later') || 0)) return false; } catch (e) { } return true; }
+function viewInstall(v) { head(v, '홈 화면에 추가 (앱처럼 쓰기)', isStandalone() ? '지금 홈 화면 앱으로 실행 중입니다. 다른 기기나 다른 분께 알려 줄 때 아래 안내를 쓰세요.' : ''); v.append(installCard(true)); }
+
 /* ===== 계산 입문 ===== */
 function viewIntro(v) {
   const n = +((location.hash.split('-')[1]) || 0);
@@ -1557,8 +1593,8 @@ function viewIntro(v) {
   const list = el('div', 'tiles');
   LESSONS.forEach((l, i) => { const a = el('a', 'tile wide'); a.href = '#intro-' + (i + 1); a.innerHTML = `<div style="min-width:0"><b>${i + 1}강 · ${esc(l.t)}</b><span>${esc(l.word.slice(0, 46))}…</span></div>${done[i + 1] ? '<span class="pill good">완료</span>' : '<span class="pill info">' + l.gens.length + '유형</span>'}`; list.append(a); });
   v.append(list);
-  const g = el('section', 'panel'); g.innerHTML = '<h3>기호 사전</h3><p class="small muted" style="margin:0">시험지와 교재에 나오는 기호를 한글로 풀었습니다.</p>';
-  const tw = el('div', 'tablewrap'); tw.innerHTML = `<table><thead><tr><th>기호</th><th>이름</th><th>쉬운 뜻</th></tr></thead><tbody>${GLOSSARY.map(x => `<tr><td class="num" style="white-space:nowrap"><b>${esc(x[0])}</b></td><td style="white-space:nowrap">${esc(x[1])}</td><td>${esc(x[2])}</td></tr>`).join('')}</tbody></table>`;
+  const g = el('section', 'panel'); g.innerHTML = '<h3>기호 사전 · 읽는 법</h3><p class="small muted" style="margin:0">시험지와 교재에 나오는 기호를 소리 내어 읽는 법과 뜻으로 풀었습니다. 소리 내어 읽으면 훨씬 덜 낯섭니다.</p>';
+  const tw = el('div', 'tablewrap'); tw.innerHTML = `<table><thead><tr><th>기호</th><th>읽는 법</th><th>뜻</th></tr></thead><tbody>${GLOSSARY.map(x => `<tr><td class="num" style="white-space:nowrap;font-size:16px"><b>${esc(x[0])}</b></td><td style="color:var(--accent);font-weight:600">${esc(x[1])}</td><td><b>${esc(x[2])}</b><div class="small muted">${esc(x[3])}</div></td></tr>`).join('')}</tbody></table>`;
   g.append(tw); v.append(g);
 }
 function lessonDetail(v, n) {
@@ -1569,7 +1605,7 @@ function lessonDetail(v, n) {
   p.innerHTML = `<div><span class="pill info">① 이야기</span><p style="margin:8px 0 0">${esc(l.story)}</p></div>
   <div class="easy"><span class="lbl">② 말로 쓴 공식</span>${esc(l.word)}</div>
   <div><span class="pill good">③ 쉬운 숫자로</span><p class="num" style="margin:8px 0 0">${esc(l.ex)}</p></div>
-  <details><summary class="small"><b>④ 기호로 쓰면 (시험지 표기)</b></summary><p class="num" style="margin:8px 0 0">${esc(l.sym)}</p><p class="small muted" style="margin:6px 0 0">기호 뜻은 계산 입문 목록 아래 기호 사전에 있습니다.</p></details>`;
+  <details><summary class="small"><b>④ 기호로 쓰면 (시험지 표기)</b></summary><p class="num" style="margin:8px 0 0">${esc(l.sym)}</p>${l.read ? `<p style="margin:6px 0 0"><span class="pill info">읽는 법</span> ${esc(l.read)}</p>` : ''}<p class="small muted" style="margin:6px 0 0">기호 뜻과 읽는 법은 계산 입문 목록 아래 기호 사전에 있습니다.</p></details>`;
   v.append(p);
   const q = el('section', 'panel'); q.innerHTML = '<h3>⑤ 바로 풀어 보기</h3>';
   l.gens.forEach(id => { const g = GENS.find(x => x.id === id); const r = el('div', 'row'); r.innerHTML = `<div style="min-width:0;flex:1"><b>${esc(g.name)}</b><div class="small muted">${esc(EASY[id][0])}</div></div>`; r.append(btn('3문제', '', () => { S.lessons = S.lessons || {}; S.lessons[n] = 1; persist(); startRun('calc', Array.from({ length: 3 }, () => buildCalc(g)), { title: `${n}강 · ${g.name}`, again: () => go('intro-' + n) }); })); q.append(r); });
@@ -1729,7 +1765,7 @@ function focusRun(keys) {
 
 /* ===== OX ===== */
 function viewOX(v) {
-  head(v, 'OX 퀴즈', `문제은행의 보기 ${OXQ.length}개를 참/거짓 문장으로 바꿔 ${OX_SIZE}문항씩 ${OX_SETS}세트로 나눴습니다.`);
+  head(v, 'OX 퀴즈', `문제마다 정답 보기 1개와 오답 보기 1개를 골라 "이 보기가 정답인가?"를 O·X로 묻습니다. ${OXQ.length}문항을 ${OX_SIZE}문항씩 ${OX_SETS}세트로 나눴습니다.`);
   const grid = el('div', 'grid2');
   for (let k = 0; k < OX_SETS; k++) {
     const items = OX_ORDER.slice(k * OX_SIZE, (k + 1) * OX_SIZE), o = S.ox['set' + k] || { n: 0, c: 0, done: {} }, done = Object.keys(o.done).length;
