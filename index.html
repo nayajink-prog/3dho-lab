@@ -144,6 +144,10 @@ a.link{color:var(--accent);font-weight:600;text-decoration:none}
 .plantable tr.done td:not(:last-child){color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent)}
 .plantable input{width:20px;height:20px;accent-color:var(--accent)}
 .choice{display:flex;flex-wrap:wrap;gap:8px}
+.confirm span{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
+.panel,.panel *{overflow-wrap:break-word;word-break:keep-all}
+.pill{max-width:100%;white-space:normal}
+.choice button:disabled{opacity:.45}.choice button.over{text-decoration:line-through}
 .choice button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .guide ol{margin:0;padding-left:20px;display:grid;gap:10px}
 .guide li b{display:block}
@@ -1638,17 +1642,20 @@ function viewPlan(v) {
   const cfg = planCfg(), days = curPlan(), d = today(), left = daysBetween(d, S.examDate) + 1, end = days[days.length - 1].d;
   const done = Object.keys(S.planDone || {}).length;
   head(v, '학습플랜', `${cfg.fit ? '기본 플랜(시험일 맞춤)' : cfg.n + '일 플랜'} · ${esc(cfg.start)} ~ ${esc(end)} · 완료 ${done}/${days.length}일`);
-  if (end !== S.examDate) v.insertAdjacentHTML('beforeend', `<div class="confirm"><span>플랜 마지막 날(${esc(end)})이 시험일(${esc(S.examDate)})과 다릅니다. 아래에서 '시험일에 끝나도록'을 고르면 날짜가 맞춰집니다.</span></div>`);
+  if (end > S.examDate) v.insertAdjacentHTML('beforeend', `<div class="confirm"><span>지금 플랜이 시험일(${esc(S.examDate)})보다 늦게(${esc(end)}) 끝납니다. 아래에서 남은 기간 안의 플랜을 다시 골라 주세요.</span></div>`);
+  else if (end < S.examDate) v.insertAdjacentHTML('beforeend', `<div class="confirm"><span>플랜이 시험일보다 ${daysBetween(end, S.examDate)}일 먼저 끝납니다. 남는 날은 맞춤학습·모의고사로 보충하거나 '시험일에 끝나도록'을 고르세요.</span></div>`);
   const ch = el('section', 'panel');
   const rec = PLAN_OPTS.filter(n => n <= left).pop();
   ch.innerHTML = `<h3>플랜 고르기</h3><p class="small muted" style="margin:0">시험일(${esc(S.examDate)})까지 오늘 포함 ${left}일 남았습니다.${rec ? ` 추천: <b>시험일 맞춤 ${left}일</b> 또는 <b>${rec}일 플랜</b>을 시험일에 끝나도록.` : ''}</p>`;
-  const pick = planPick || { n: cfg.fit ? 'fit' : cfg.n, mode: 'end' };
+  let pick = planPick || { n: cfg.fit ? 'fit' : cfg.n, mode: 'end' };
+  if (pick.n !== 'fit' && pick.n > left) pick = { ...pick, n: 'fit' };
   const c1 = el('div', 'choice');
-  [...PLAN_OPTS, 'fit'].forEach(n => { const b = btn(n === 'fit' ? `시험일 맞춤 ${left}일` : n + '일', '', () => { planPick = { ...pick, n }; render(); }); b.setAttribute('aria-pressed', String(pick.n === n)); c1.append(b); });
+  [...PLAN_OPTS, 'fit'].forEach(n => { const over = n !== 'fit' && n > left; const b = btn(n === 'fit' ? `시험일 맞춤 ${left}일` : n + '일' + (over ? ' (기간 부족)' : ''), '', () => { planPick = { ...pick, n }; render(); }); b.setAttribute('aria-pressed', String(pick.n === n)); if (over) { b.disabled = true; b.classList.add('over'); b.title = `시험까지 ${left}일이라 ${n}일 플랜은 쓸 수 없습니다`; } c1.append(b); });
+  if (PLAN_OPTS.some(n => n > left)) ch.insertAdjacentHTML('beforeend', `<p class="small muted" style="margin:0">시험까지 남은 ${left}일보다 긴 플랜은 시험일을 넘기므로 고를 수 없습니다. 시험일을 바꾸면(기록·설정) 다시 열립니다.</p>`);
   const c2 = el('div', 'choice');
   [['end', '시험일에 끝나도록'], ['today', '오늘부터 시작']].forEach(([m, t]) => { const b = btn(t, '', () => { planPick = { ...pick, mode: m }; render(); }); b.setAttribute('aria-pressed', String(pick.mode === m)); if (pick.n === 'fit') b.disabled = true; c2.append(b); });
   const N = pick.n === 'fit' ? left : pick.n, st = pick.n === 'fit' || pick.mode === 'end' ? addDays(S.examDate, -(N - 1)) : d;
-  const warn = st < d ? `<span class="pill bad">시작일 ${esc(st)}이 이미 지났습니다. 앞부분 일정은 건너뛰거나 '오늘부터 시작'을 고르세요.</span>` : '';
+  const warn = st < d ? `<div class="confirm" style="margin-top:8px"><span>시작일 ${esc(st)}이 이미 지났습니다. '오늘부터 시작'을 고르세요.</span></div>` : '';
   ch.append(c1, c2);
   ch.insertAdjacentHTML('beforeend', `<div class="small">미리보기: <b>${N}일</b> · ${esc(st)} ~ ${esc(addDays(st, N - 1))} ${warn}</div>`);
   ch.append(btn('이 플랜으로 바꾸기', 'primary', () => confirmBox2(ch, '일정과 카드가 열리는 날짜가 새로 계산됩니다. 풀이 기록은 그대로 남습니다.', '바꾸기', () => { S.plan = pick.n === 'fit' ? { n: N, start: st, fit: 1 } : { n: N, start: st }; S.planDone = {}; planPick = null; persist(); render(); })));
