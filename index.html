@@ -132,6 +132,15 @@ td.r,th.r{text-align:right}
 .ringcard{display:flex;gap:12px;align-items:center}
 .ringcard .grow{flex:1;min-width:0}
 a.link{color:var(--accent);font-weight:600;text-decoration:none}
+.oxq{display:grid;gap:16px;margin-top:4px}
+.oxstmt{border:1px solid var(--line);border-left:4px solid var(--omr);border-radius:10px;padding:16px 18px;background:var(--sunk);font-size:16px;line-height:1.8;font-weight:500}
+.oxstmt .lbl{display:block;font-size:12px;font-weight:700;color:var(--omr);letter-spacing:.06em;margin-bottom:8px}
+.oxhint{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
+.oxbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.oxbtns .opt{justify-content:center;align-items:center;min-height:68px;font-size:26px;font-weight:700}
+.opts{gap:12px}
+.opt{padding:13px 14px;line-height:1.55}
+.panel .q{line-height:1.7}
 svg text{fill:var(--muted);font-family:var(--f-num);font-size:11px}
 @media (prefers-reduced-motion:no-preference){.opt,.sheet button{transition:background .12s,border-color .12s}}
 
@@ -145,7 +154,7 @@ svg text{fill:var(--muted);font-family:var(--f-num);font-size:11px}
     <div class="row"><span class="logo"><span class="wm"><i>3D</i>ho</span><b>LAB</b></span><button type="button" class="ghost" id="menuClose" aria-label="메뉴 닫기" style="margin-left:auto;min-height:36px">닫기</button></div>
     <div class="sync small muted" id="sync">저장 위치 확인 중…</div>
     <nav id="tabs">
-      <a href="#home">홈</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#calc">계산 드릴</a><a href="#records">기록·설정</a>
+      <a href="#home">홈</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#calc">계산문제</a><a href="#records">기록·설정</a>
     </nav>
   </div>
   <div class="scrim" id="scrim"></div>
@@ -732,7 +741,7 @@ const SUBKEYS = Object.keys(SUBS);
 const MOCK_CALC = { BND: 2, DRV: 2, PERF: 2, DIV: 2, RSK: 3, ANA: 4, RE: 1, EQ: 1, INT: 1, MAC: 1 };
 const LAWSUBS = ['TAX', 'ETH', 'LAW', 'KFA'];
 const MOCK_ROUNDS = 5, OX_SIZE = 50;
-const PLAN = {"2026-11-23":"B01 거시경제①: GDP·IS-LM·재정/통화정책","2026-11-24":"B02 거시경제②: 이자율 결정·경기지표","2026-11-25":"B03 분산투자①: 기대수익·분산·2자산 포트","2026-11-26":"B04 분산투자②: 효율적 투자선·CAPM·APT","2026-11-27":"B05 주식운용①: 패시브/액티브·스타일","2026-11-28":"B06 주식운용②: 자산배분·포트폴리오 보험 + 계산드릴","2026-11-29":"1주차 누적 복습","2026-11-30":"B07 채권①: 가격·수익률·채권 종류","2026-12-01":"B08 채권②: 듀레이션·볼록성","2026-12-02":"B09 채권③: 수익률곡선·면역화·운용전략","2026-12-03":"B10 파생①: 선물 가격·베이시스·헤지","2026-12-04":"B11 파생②: 옵션 페이오프·패리티·그릭스","2026-12-05":"B12 파생③+성과①: 옵션전략·스왑 / 수익률 측정","2026-12-06":"B13 성과②: 위험조정성과·성과요인분해","2026-12-07":"B14 투자분석①: 재무비율·듀퐁","2026-12-08":"B15 투자분석②: DDM·PER·PBR·EV/EBITDA","2026-12-09":"B16 투자분석③: 기술적 분석","2026-12-10":"B17 투자분석④: 산업·경기 분석","2026-12-11":"B18 리스크①: VaR 개념·계산","2026-12-12":"B19 리스크②: 신용·운영리스크 + 계산드릴","2026-12-13":"2~3주차 누적 복습","2026-12-14":"B20 대안투자①: 부동산펀드·PEF·헤지펀드","2026-12-15":"B21 대안투자②: 신용파생·인프라","2026-12-16":"B22 해외증권: 국제분산·환위험","2026-12-17":"B23 금융상품①: 예금·집합투자·랩","2026-12-18":"B24 금융상품②: 신탁·ISA·연금·구조화","2026-12-19":"B25 부동산상품: 가치평가·리츠 + 드릴","2026-12-20":"4주차 누적 복습","2026-12-21":"B26 세제①: 조세총론 · 원서접수 확인(추정 12/21~25)","2026-12-22":"B27 세제②: 소득세·금융소득 종합과세","2026-12-23":"B28 세제③: 양도·상속·증여세","2026-12-24":"B29 직무윤리·금소법","2026-12-25":"B30 협회규정","2026-12-26":"B31 자본시장법①: 금융투자업·투자자","2026-12-27":"B32 자본시장법②: 공시·불공정거래","2026-12-28":"B33 자본시장법③: 집합투자·건전성","2026-12-29":"보강: 채권·파생 계산","2026-12-30":"보강: 성과·VaR·가치평가 계산","2026-12-31":"모의고사 1회","2027-01-01":"모의고사 1회 오답 정리","2027-01-02":"3과목 법규 2회독","2027-01-03":"3과목 운용 2회독","2027-01-04":"모의고사 2회","2027-01-05":"모의고사 2회 오답","2027-01-06":"1과목 2회독","2027-01-07":"2과목 2회독","2027-01-08":"모의고사 3회","2027-01-09":"모의고사 3회 오답","2027-01-10":"공식 백지 재현","2027-01-11":"모의고사 4회","2027-01-12":"모의고사 4회 오답","2027-01-13":"법규 숫자·기한 총정리","2027-01-14":"계산 공식 총정리","2027-01-15":"오답 카드 전체 1회전","2027-01-16":"가벼운 정리·준비물 점검","2027-01-17":"시험일(추정) · 09:40 전 입실"};
+const PLAN = {"2026-11-23":"B01 거시경제①: GDP·IS-LM·재정/통화정책","2026-11-24":"B02 거시경제②: 이자율 결정·경기지표","2026-11-25":"B03 분산투자①: 기대수익·분산·2자산 포트","2026-11-26":"B04 분산투자②: 효율적 투자선·CAPM·APT","2026-11-27":"B05 주식운용①: 패시브/액티브·스타일","2026-11-28":"B06 주식운용②: 자산배분·포트폴리오 보험 + 계산문제","2026-11-29":"1주차 누적 복습","2026-11-30":"B07 채권①: 가격·수익률·채권 종류","2026-12-01":"B08 채권②: 듀레이션·볼록성","2026-12-02":"B09 채권③: 수익률곡선·면역화·운용전략","2026-12-03":"B10 파생①: 선물 가격·베이시스·헤지","2026-12-04":"B11 파생②: 옵션 페이오프·패리티·그릭스","2026-12-05":"B12 파생③+성과①: 옵션전략·스왑 / 수익률 측정","2026-12-06":"B13 성과②: 위험조정성과·성과요인분해","2026-12-07":"B14 투자분석①: 재무비율·듀퐁","2026-12-08":"B15 투자분석②: DDM·PER·PBR·EV/EBITDA","2026-12-09":"B16 투자분석③: 기술적 분석","2026-12-10":"B17 투자분석④: 산업·경기 분석","2026-12-11":"B18 리스크①: VaR 개념·계산","2026-12-12":"B19 리스크②: 신용·운영리스크 + 계산문제","2026-12-13":"2~3주차 누적 복습","2026-12-14":"B20 대안투자①: 부동산펀드·PEF·헤지펀드","2026-12-15":"B21 대안투자②: 신용파생·인프라","2026-12-16":"B22 해외증권: 국제분산·환위험","2026-12-17":"B23 금융상품①: 예금·집합투자·랩","2026-12-18":"B24 금융상품②: 신탁·ISA·연금·구조화","2026-12-19":"B25 부동산상품: 가치평가·리츠 + 드릴","2026-12-20":"4주차 누적 복습","2026-12-21":"B26 세제①: 조세총론 · 원서접수 확인(추정 12/21~25)","2026-12-22":"B27 세제②: 소득세·금융소득 종합과세","2026-12-23":"B28 세제③: 양도·상속·증여세","2026-12-24":"B29 직무윤리·금소법","2026-12-25":"B30 협회규정","2026-12-26":"B31 자본시장법①: 금융투자업·투자자","2026-12-27":"B32 자본시장법②: 공시·불공정거래","2026-12-28":"B33 자본시장법③: 집합투자·건전성","2026-12-29":"보강: 채권·파생 계산","2026-12-30":"보강: 성과·VaR·가치평가 계산","2026-12-31":"모의고사 1회","2027-01-01":"모의고사 1회 오답 정리","2027-01-02":"3과목 법규 2회독","2027-01-03":"3과목 운용 2회독","2027-01-04":"모의고사 2회","2027-01-05":"모의고사 2회 오답","2027-01-06":"1과목 2회독","2027-01-07":"2과목 2회독","2027-01-08":"모의고사 3회","2027-01-09":"모의고사 3회 오답","2027-01-10":"공식 백지 재현","2027-01-11":"모의고사 4회","2027-01-12":"모의고사 4회 오답","2027-01-13":"법규 숫자·기한 총정리","2027-01-14":"계산 공식 총정리","2027-01-15":"오답 카드 전체 1회전","2027-01-16":"가벼운 정리·준비물 점검","2027-01-17":"시험일(추정) · 09:40 전 입실"};
 const FORMULAS = {
   BND: ['가격 P = Σ C/(1+y)^t + F/(1+y)^n', '맥컬리 D = Σ(t×PV) ÷ P', '수정 MD = D ÷ (1+y/m)', 'ΔP/P ≈ −MD·Δy + ½·C·(Δy)²', 'CB 패리티 = 주가 ÷ 전환가격 × 100'],
   DRV: ['지수선물 F = S × [1 + (r − d) × t/365]', '헤지 계약수 N = β × P ÷ (F × 승수)', '헤지비율 h = ρ × σS ÷ σF', '풋-콜 패리티 C + K/(1+r)^T = P + S', '손익분기: 콜 K+c, 풋 K−p'],
@@ -851,9 +860,9 @@ function drawRun() {
   const q = s.qs[s.i], box = el('section', 'panel');
   box.innerHTML = `<div class="row small muted"><span>${esc(s.title || '')}</span><span class="pill info">${esc(SUBS[q.sub][0])}</span>${q.calc ? '<span class="pill warn">계산</span>' : ''}<span style="margin-left:auto" class="num">${s.i + 1} / ${s.qs.length}</span></div>`;
   if (q.ox) {
-    box.insertAdjacentHTML('beforeend', `<div class="q">${esc(q.q)}</div><div class="explain" style="border-color:var(--omr)"><b>보기</b> ${esc(q.stmt)}</div><p class="small muted">이 보기가 질문에 대해 ${q.neg ? '옳은 내용(정답이 아닌 보기)' : '정답'}이면 O</p>`);
-    const row = el('div', 'rate'); row.style.gridTemplateColumns = '1fr 1fr';
-    [['O', true], ['X', false]].forEach(([t, val]) => { const b = btn(t, 'opt', () => answer(val === q.truth, b, row)); b.style.justifyContent = 'center'; b.style.fontSize = '22px'; row.append(b); });
+    box.insertAdjacentHTML('beforeend', `<div class="oxq"><div class="q">${esc(q.q)}</div><div class="oxstmt"><span class="lbl">보기</span>${esc(q.stmt)}</div><p class="oxhint">이 보기가 질문에 대해 ${q.neg ? '<b>옳은 내용</b>(정답이 아닌 보기)' : '<b>정답</b>'}이면 O, 아니면 X</p></div>`);
+    const row = el('div', 'oxbtns');
+    [['O', true], ['X', false]].forEach(([t, val]) => { const b = btn(t, 'opt', () => answer(val === q.truth, b, row)); row.append(b); });
     box.append(row);
   } else {
     box.insertAdjacentHTML('beforeend', `<div class="q">${esc(q.q)}</div>`);
@@ -920,7 +929,7 @@ function viewHome(v) {
   v.append(p);
   const due = dueCards().length + Math.min(newCards().length, 30);
   const tiles = el('div', 'tiles');
-  [['notes', '핵심노트', `16편 · 완독 ${SUBKEYS.filter(k => S.notes[k]).length}`, 'wide'], ['bank', '문제모음', '모의고사 5회 · OX · 계산 · 세제·법규 집중', 'wide'], ['practice', '연습문제', '세부과목별 문제'], ['wrong', '오답노트', `${S.wrong.length}개 틀린 문제`], ['focus', '맞춤학습', '취약 세부과목 분석'], ['mock', '모의고사', '실전 100문항'], ['cards', '카드 복습', `오늘 ${due}장`], ['calc', '계산 드릴', `${GENS.length}개 유형`]]
+  [['notes', '핵심노트', `16편 · 완독 ${SUBKEYS.filter(k => S.notes[k]).length}`, 'wide'], ['bank', '문제모음', '모의고사 5회 · OX · 계산 · 세제·법규 집중', 'wide'], ['practice', '연습문제', '세부과목별 문제'], ['wrong', '오답노트', `${S.wrong.length}개 틀린 문제`], ['focus', '맞춤학습', '취약 세부과목 분석'], ['mock', '모의고사', '실전 100문항'], ['cards', '카드 복습', `오늘 ${due}장`], ['calc', '계산문제', `${GENS.length}개 유형`]]
     .forEach(([k, t, s, w]) => { const a = el('a', 'tile' + (w ? ' wide' : '')); a.href = '#' + k; a.innerHTML = `<div style="min-width:0"><b>${t}</b><span>${s}</span></div>${icon(k)}`; tiles.append(a); });
   v.append(tiles);
   viewHomeOld(v, true);
@@ -950,7 +959,7 @@ function viewHomeOld(v, tail) {
   const today3 = el('section', 'panel');
   today3.innerHTML = `<h3>오늘 할 일</h3>`;
   const r = el('div', 'row');
-  r.append(btn(`카드 복습 ${due + Math.min(nw, 30)}장`, 'primary', () => go('cards')), btn('연습문제', '', () => go('practice')), btn('계산 드릴', '', () => go('calc')), btn('모의고사', 'omr', () => go('mock')));
+  r.append(btn(`카드 복습 ${due + Math.min(nw, 30)}장`, 'primary', () => go('cards')), btn('연습문제', '', () => go('practice')), btn('계산문제', '', () => go('calc')), btn('모의고사', 'omr', () => go('mock')));
   today3.append(r); v.append(today3);
   /* 과목별 현황 */
   const sec = el('section', 'panel'); sec.innerHTML = '<h3>과목별 현황</h3>';
@@ -1165,9 +1174,9 @@ function viewOX(v) {
   v.append(grid);
 }
 
-/* ===== 계산 드릴 ===== */
+/* ===== 계산문제 ===== */
 function viewCalc(v) {
-  head(v, '계산 드릴', '숫자를 매번 새로 뽑습니다. 오답 보기는 자주 하는 실수에서 만들었고, 풀이와 계산기 누르는 순서를 함께 보여 줍니다.');
+  head(v, '계산문제', '숫자를 매번 새로 뽑습니다. 오답 보기는 자주 하는 실수에서 만들었고, 풀이와 계산기 누르는 순서를 함께 보여 줍니다.');
   const top = el('section', 'panel'); const r = el('div', 'row');
   r.append(btn('전체 랜덤 10문제', 'primary', () => startRun('calc', Array.from({ length: 10 }, () => buildCalc(GENS[Math.floor(Math.random() * GENS.length)])), { title: '계산 랜덤', again: () => go('calc') })));
   r.append(btn('약한 유형 10문제', '', () => { const w = GENS.map(g => { const c = S.calc[g.id]; return [g, c ? c.c / c.n : -1]; }).sort((a, b) => a[1] - b[1]).slice(0, 5).map(x => x[0]); startRun('calc', Array.from({ length: 10 }, (_, i) => buildCalc(w[i % w.length])), { title: '약한 유형', again: () => go('calc') }); }));
