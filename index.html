@@ -9,32 +9,33 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<script>try{var t=localStorage.getItem('tus-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
 </head><body><title>3Dho LAB</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
-/* 레이아웃: 상단 바 + 탭 내비 + 한 열 작업 영역(최대 860px). OMR 답안지의 분홍 괘선을 모의고사 강조색으로 사용 */
+/* 레이아웃: 상단 바 + 서랍 메뉴 + 한 열 작업 영역(최대 860px). 색은 3Dho LAB 로고(흰 바탕·검은 글자·파란 LAB) 기준 */
 :root{
-  --bg:#f3f5f2; --surface:#ffffff; --sunk:#e9ece7; --ink:#15202a; --muted:#56626c; --line:#d6dbd3;
-  --accent:#1f66d1; --accent-ink:#ffffff; --accent-soft:#e2ecfb;
-  --omr:#c43d63; --omr-soft:#fbe4eb;
-  --good:#2a7a4b; --good-soft:#dcf0e3; --warn:#a8701a; --warn-soft:#f7ebd5; --bad:#b83a34; --bad-soft:#f8dedc;
+  --bg:#f5f7fa; --surface:#ffffff; --sunk:#eef1f5; --ink:#111418; --muted:#555d68; --line:#dfe3e8;
+  --accent:#1f66d1; --accent-ink:#ffffff; --accent-soft:#e8f0fc; --brand:#111418;
+  --omr:#111418; --omr-ink:#ffffff; --omr-soft:#eef1f5;
+  --good:#1d7a49; --good-soft:#e1f3e8; --warn:#94600e; --warn-soft:#faefdc; --bad:#b4332d; --bad-soft:#fce6e4;
   --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --f-num:"IBM Plex Mono",ui-monospace,Consolas,monospace;
-  --r:10px;
+  --r:12px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#11161b; --surface:#192027; --sunk:#141a20; --ink:#e5e9ec; --muted:#9aa6af; --line:#2a333b;
-  --accent:#7fb0f5; --accent-ink:#0c1729; --accent-soft:#1c2b44;
-  --omr:#ec7898; --omr-soft:#3a1f29;
-  --good:#6cc794; --good-soft:#173326; --warn:#e2b25a; --warn-soft:#352a14; --bad:#ef7f78; --bad-soft:#3a1d1b; color-scheme:dark}}
+  --bg:#0c0e11; --surface:#15181d; --sunk:#1c2026; --ink:#eef1f4; --muted:#a6aeb8; --line:#2b3038;
+  --accent:#6ea6ff; --accent-ink:#0a1322; --accent-soft:#16253d; --brand:#eef1f4;
+  --omr:#eef1f4; --omr-ink:#0c0e11; --omr-soft:#1c2026;
+  --good:#6fd39b; --good-soft:#12301f; --warn:#f0bd62; --warn-soft:#33270f; --bad:#ff8a82; --bad-soft:#3a1a18; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#11161b; --surface:#192027; --sunk:#141a20; --ink:#e5e9ec; --muted:#9aa6af; --line:#2a333b;
-  --accent:#7fb0f5; --accent-ink:#0c1729; --accent-soft:#1c2b44;
-  --omr:#ec7898; --omr-soft:#3a1f29;
-  --good:#6cc794; --good-soft:#173326; --warn:#e2b25a; --warn-soft:#352a14; --bad:#ef7f78; --bad-soft:#3a1d1b; color-scheme:dark}
+  --bg:#0c0e11; --surface:#15181d; --sunk:#1c2026; --ink:#eef1f4; --muted:#a6aeb8; --line:#2b3038;
+  --accent:#6ea6ff; --accent-ink:#0a1322; --accent-soft:#16253d; --brand:#eef1f4;
+  --omr:#eef1f4; --omr-ink:#0c0e11; --omr-soft:#1c2026;
+  --good:#6fd39b; --good-soft:#12301f; --warn:#f0bd62; --warn-soft:#33270f; --bad:#ff8a82; --bad-soft:#3a1a18; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;margin:0}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
@@ -43,7 +44,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .top .wrap{padding-block:10px 0}
 .brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .brand h1{font-size:18px;margin:0;letter-spacing:-.01em}
-.brand .dday{font-family:var(--f-num);font-weight:600;color:var(--omr)}
+.brand .dday{font-family:var(--f-num);font-weight:600;color:var(--accent)}
 .brand .sync{margin-left:auto;font-size:12px;color:var(--muted)}
 nav.tabs{display:flex;gap:2px;overflow-x:auto;margin-top:6px;scrollbar-width:none}
 nav.tabs a{flex:none;padding:8px 12px;color:var(--muted);text-decoration:none;font-weight:500;border-bottom:2px solid transparent;font-size:14px}
@@ -63,7 +64,7 @@ h3{font-size:15px;margin:0}
 .stat span{font-size:12px;color:var(--muted);letter-spacing:.02em}
 button,.btn{font:inherit;font-weight:600;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;cursor:pointer;min-height:40px}
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-button.omr{background:var(--omr);border-color:var(--omr);color:#fff}
+button.omr{background:var(--omr);border-color:var(--omr);color:var(--omr-ink)}
 button.ghost{background:transparent}
 button:disabled{opacity:.5;cursor:default}
 select,input[type=number],input[type=date]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);min-height:40px}
@@ -98,16 +99,16 @@ td.r,th.r{text-align:right}
 .rate button{display:grid;gap:0;line-height:1.3}
 .rate small{font-weight:400;font-size:12px;color:var(--muted)}
 .omrbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:4;background:var(--omr-soft);border:1px solid var(--omr);border-radius:var(--r);padding:8px 12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.omrbar .timer{font-family:var(--f-num);font-size:20px;font-weight:600;color:var(--omr)}
+.omrbar .timer{font-family:var(--f-num);font-size:20px;font-weight:600;color:var(--accent)}
 .sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:4px}
 .sheet button{min-height:32px;padding:2px;font-family:var(--f-num);font-size:12px;font-weight:500;border-color:color-mix(in srgb,var(--omr) 45%,var(--line));background:var(--surface)}
-.sheet button.done{background:var(--omr);color:#fff;border-color:var(--omr)}
+.sheet button.done{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .sheet button.flag{box-shadow:inset 0 -3px 0 var(--warn)}
 .sheet button.cur{outline:2px solid var(--ink)}
-.subjhead{font-size:12px;color:var(--omr);font-weight:600;letter-spacing:.03em}
+.subjhead{font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.03em}
 .confirm{border:1px solid var(--warn);background:var(--warn-soft);border-radius:8px;padding:10px 12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .empty{color:var(--muted);text-align:center;padding:24px 8px}
-.logo{display:inline-flex;align-items:center;gap:8px;color:var(--ink)}.logo .wm{font-family:"Space Grotesk",var(--f-body);font-weight:700;font-size:21px;letter-spacing:-.02em;line-height:1}.logo .wm i{font-style:normal}.logo b{font-family:"Space Grotesk",var(--f-body);font-size:10px;font-weight:700;letter-spacing:.32em;padding:3px 3px 3px 7px;border:1.5px solid var(--accent);border-radius:4px;color:var(--accent);line-height:1}
+.logo{display:inline-flex;align-items:center;gap:8px;color:var(--brand)}.logo .wm{font-family:"Space Grotesk",var(--f-body);font-weight:700;font-size:21px;letter-spacing:-.02em;line-height:1}.logo .wm i{font-style:normal}.logo b{font-family:"Space Grotesk",var(--f-body);font-size:10px;font-weight:700;letter-spacing:.32em;padding:3px 3px 3px 7px;border:1.5px solid var(--accent);border-radius:4px;color:var(--accent);line-height:1}
 .menubtn{border:0;background:transparent;padding:6px;min-height:40px;display:grid;place-items:center;color:var(--ink)}
 .brand{align-items:center;padding-bottom:10px}
 .brand .dday{margin-left:auto}
@@ -132,16 +133,28 @@ td.r,th.r{text-align:right}
 .ringcard{display:flex;gap:12px;align-items:center}
 .ringcard .grow{flex:1;min-width:0}
 a.link{color:var(--accent);font-weight:600;text-decoration:none}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--sunk);border-radius:10px;padding:3px;gap:3px}
+.seg button{min-height:34px;border:0;background:transparent;font-size:13px;font-weight:600;color:var(--muted);border-radius:8px;padding:4px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px color-mix(in srgb,#000 18%,transparent)}
+.pill.dark{background:var(--omr);color:var(--omr-ink)}
+.plantable td{vertical-align:middle}
+.plantable tr.today td{background:var(--accent-soft)}
+.plantable tr.done td:not(:last-child){color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent)}
+.plantable input{width:20px;height:20px;accent-color:var(--accent)}
+.choice{display:flex;flex-wrap:wrap;gap:8px}
+.choice button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.guide ol{margin:0;padding-left:20px;display:grid;gap:10px}
+.guide li b{display:block}
 .oxq{display:grid;gap:16px;margin-top:4px}
-.oxstmt{border:1px solid var(--line);border-left:4px solid var(--omr);border-radius:10px;padding:16px 18px;background:var(--sunk);font-size:16px;line-height:1.8;font-weight:500}
-.oxstmt .lbl{display:block;font-size:12px;font-weight:700;color:var(--omr);letter-spacing:.06em;margin-bottom:8px}
+.oxstmt{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:16px 18px;background:var(--sunk);font-size:16px;line-height:1.8;font-weight:500}
+.oxstmt .lbl{display:block;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:8px}
 .oxhint{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
 .oxbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
 .oxbtns .opt{justify-content:center;align-items:center;min-height:68px;font-size:26px;font-weight:700}
 .opts{gap:12px}
 .opt{padding:13px 14px;line-height:1.55}
 .panel .q{line-height:1.7}
-svg text{fill:var(--muted);font-family:var(--f-num);font-size:11px}
+svg text{fill:var(--muted);font-family:var(--f-num);font-size:12px}
 @media (prefers-reduced-motion:no-preference){.opt,.sheet button{transition:background .12s,border-color .12s}}
 
 </style>
@@ -153,8 +166,9 @@ svg text{fill:var(--muted);font-family:var(--f-num);font-size:11px}
   <div class="pane">
     <div class="row"><span class="logo"><span class="wm"><i>3D</i>ho</span><b>LAB</b></span><button type="button" class="ghost" id="menuClose" aria-label="메뉴 닫기" style="margin-left:auto;min-height:36px">닫기</button></div>
     <div class="sync small muted" id="sync">저장 위치 확인 중…</div>
+    <div class="seg" role="group" aria-label="화면 테마"><button type="button" data-th="system">시스템</button><button type="button" data-th="light">라이트</button><button type="button" data-th="dark">다크</button></div>
     <nav id="tabs">
-      <a href="#home">홈</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#calc">계산문제</a><a href="#records">기록·설정</a>
+      <a href="#home">홈</a><a href="#plan">학습플랜</a><a href="#notes">핵심노트</a><a href="#bank">문제모음</a><a href="#practice">연습문제</a><a href="#mock">모의고사</a><a href="#wrong">오답노트</a><a href="#focus">맞춤학습</a><a href="#cards">카드 복습</a><a href="#ox">OX 퀴즈</a><a href="#calc">계산문제</a><a href="#records">기록·설정</a>
     </nav>
   </div>
   <div class="scrim" id="scrim"></div>
@@ -776,7 +790,7 @@ const OX_ORDER = shuffle(OXQ, mulberry(4242)); const OX_SETS = Math.ceil(OX_ORDE
 
 /* ===== 상태·저장 ===== */
 const LS = 'tus-note-v1';
-function blank() { return { v: 1, updated: 0, examDate: '2027-01-17', unlockAll: false, cards: {}, prac: {}, calc: {}, ox: {}, mocks: {}, ext: [], wrong: [], notes: {}, study: {}, timer: null, goal: 30, daily: {}, acc: {} }; }
+function blank() { return { v: 1, updated: 0, examDate: '2027-01-17', unlockAll: false, cards: {}, prac: {}, calc: {}, ox: {}, mocks: {}, ext: [], wrong: [], notes: {}, study: {}, timer: null, goal: 30, daily: {}, acc: {}, plan: null, planDone: {} }; }
 let S = blank(), ref = null, mode = 'local', saveT = null, saving = Promise.resolve();
 try { const raw = localStorage.getItem(LS); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch (e) { }
 function persist() {
@@ -828,7 +842,7 @@ function progressAll() { const doneB = new Set(); Object.values(S.prac).forEach(
 function studyMin(day) { let m = day ? (S.study[day] || 0) : Object.values(S.study).reduce((a, b) => a + b, 0); if (S.timer) { const live = (Date.now() - S.timer) / 6e4; if (!day || day === today()) m += live; } return m; }
 
 /* ===== 라우팅 ===== */
-const ROUTES = { home: viewHome, bank: viewBank, focus: viewFocus, practice: viewPractice, mock: viewMock, ox: viewOX, calc: viewCalc, notes: viewNotes, cards: viewCards, wrong: viewWrong, records: viewRecords };
+const ROUTES = { home: viewHome, plan: viewPlan, bank: viewBank, focus: viewFocus, practice: viewPractice, mock: viewMock, ox: viewOX, calc: viewCalc, notes: viewNotes, cards: viewCards, wrong: viewWrong, records: viewRecords };
 let session = null; // 진행 중인 풀이 세션
 function go(h) { if (location.hash !== '#' + h) location.hash = h; else render(); }
 function render() {
@@ -896,6 +910,7 @@ function head(v, title, sub) { const h = el('div'); h.innerHTML = `<h2>${esc(tit
 
 /* ===== 홈 ===== */
 const ICON = {
+  plan: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4M8 14h3M8 17h6"/>',
   notes: '<path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h4"/>',
   bank: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/>',
   practice: '<path d="M4 6l2 2 3-3M4 13l2 2 3-3M12 7h8M12 14h8M12 20h8"/>',
@@ -908,7 +923,7 @@ const ICON = {
 const icon = k => `<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 function viewHome(v) {
   const d = today(), dd = daysBetween(d, S.examDate), td = S.daily[d] || { n: 0, c: 0 }, pr = progressAll();
-  const greet = el('div'); greet.innerHTML = `<h2 style="font-size:22px">오늘도 한 문제씩</h2><p class="muted" style="margin:2px 0 0">${dd > 0 ? `시험까지 <b class="num" style="color:var(--omr)">D-${dd}</b> · ` : ''}오늘 계획: ${esc(PLAN[d] || '약점 세부과목 연습')}</p>`; v.append(greet);
+  const greet = el('div'); greet.innerHTML = `<h2 style="font-size:22px">오늘도 한 문제씩</h2><p class="muted" style="margin:2px 0 0">${dd > 0 ? `시험까지 <b class="num" style="color:var(--accent)">D-${dd}</b> · ` : ''}오늘 계획: ${esc((planItem(d) || {}).text || '약점 세부과목 연습')} <a class="link" href="#plan">플랜 보기 →</a></p>`; v.append(greet);
   const p = el('section', 'panel');
   let wn = 0, wc = 0; weekDays().forEach(x => { const y = S.daily[x]; if (y) { wn += y.n; wc += y.c; } });
   const wmin = weekDays().reduce((a, x) => a + studyMin(x), 0), tmin = studyMin(d), all = studyMin();
@@ -929,7 +944,7 @@ function viewHome(v) {
   v.append(p);
   const due = dueCards().length + Math.min(newCards().length, 30);
   const tiles = el('div', 'tiles');
-  [['notes', '핵심노트', `16편 · 완독 ${SUBKEYS.filter(k => S.notes[k]).length}`, 'wide'], ['bank', '문제모음', '모의고사 5회 · OX · 계산 · 세제·법규 집중', 'wide'], ['practice', '연습문제', '세부과목별 문제'], ['wrong', '오답노트', `${S.wrong.length}개 틀린 문제`], ['focus', '맞춤학습', '취약 세부과목 분석'], ['mock', '모의고사', '실전 100문항'], ['cards', '카드 복습', `오늘 ${due}장`], ['calc', '계산문제', `${GENS.length}개 유형`]]
+  [['plan', '학습플랜', `${planCfg().fit ? '시험일 맞춤' : planCfg().n + '일'} 플랜 · 오늘: ${esc(((planItem(today()) || {}).text || '플랜 밖').slice(0, 26))}`, 'wide'], ['notes', '핵심노트', `16편 · 완독 ${SUBKEYS.filter(k => S.notes[k]).length}`, 'wide'], ['bank', '문제모음', '모의고사 5회 · OX · 계산 · 세제·법규 집중', 'wide'], ['practice', '연습문제', '세부과목별 문제'], ['wrong', '오답노트', `${S.wrong.length}개 틀린 문제`], ['focus', '맞춤학습', '취약 세부과목 분석'], ['mock', '모의고사', '실전 100문항'], ['cards', '카드 복습', `오늘 ${due}장`], ['calc', '계산문제', `${GENS.length}개 유형`]]
     .forEach(([k, t, s, w]) => { const a = el('a', 'tile' + (w ? ' wide' : '')); a.href = '#' + k; a.innerHTML = `<div style="min-width:0"><b>${t}</b><span>${s}</span></div>${icon(k)}`; tiles.append(a); });
   v.append(tiles);
   viewHomeOld(v, true);
@@ -983,7 +998,7 @@ function mockChart() {
   const W = 600, H = 200, pad = 30, bw = (W - pad * 2) / pts.length;
   const y = s => H - 24 - (s / 100) * (H - 44);
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="모의고사 총점 추이"><line x1="${pad}" x2="${W - 10}" y1="${y(70)}" y2="${y(70)}" stroke="var(--good)" stroke-dasharray="4 4"/><text x="${W - 12}" y="${y(70) - 4}" text-anchor="end">합격선 70</text>`;
-  pts.forEach((p, i) => { const x = pad + i * bw + bw * .2, w = bw * .6; svg += `<rect x="${x}" y="${y(p.t)}" width="${w}" height="${y(0) - y(p.t)}" rx="3" fill="${p.t >= 70 ? 'var(--accent)' : 'var(--omr)'}"/><text x="${x + w / 2}" y="${y(p.t) - 4}" text-anchor="middle">${p.t}</text><text x="${x + w / 2}" y="${H - 8}" text-anchor="middle">${esc(p.l)}</text>`; });
+  pts.forEach((p, i) => { const x = pad + i * bw + bw * .2, w = bw * .6; svg += `<rect x="${x}" y="${y(p.t)}" width="${w}" height="${y(0) - y(p.t)}" rx="3" fill="${p.t >= 70 ? 'var(--accent)' : 'var(--bad)'}"/><text x="${x + w / 2}" y="${y(p.t) - 4}" text-anchor="middle">${p.t}</text><text x="${x + w / 2}" y="${H - 8}" text-anchor="middle">${esc(p.l)}</text>`; });
   svg += `<line x1="${pad}" x2="${W - 10}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)"/></svg>`;
   const box = el('div', 'tablewrap'); box.innerHTML = svg; sec.append(box); return sec;
 }
@@ -1042,7 +1057,7 @@ function viewMock(v) {
     const m = S.mocks[r], card = el('section', 'panel');
     const answered = m && m.ans ? m.ans.filter(x => x >= 0).length : 0;
     const status = m && m.done ? (m.score.pass ? `<span class="pill good">합격 ${m.score.t}점</span>` : `<span class="pill bad">불합격 ${m.score.t}점</span>`) : answered ? `<span class="pill warn">진행 중 ${answered}/100</span>` : '<span class="pill info">미응시</span>';
-    card.innerHTML = `<div class="row"><h3>${r}회 모의고사</h3><span style="margin-left:auto">${status}</span></div><div class="bar"><i style="width:${m && m.done ? 100 : answered}%;background:var(--omr)"></i></div><div class="small muted">총 100문제 · 120분${m && m.done ? ` · ${esc(m.at)} 응시 · 1과목 ${m.score.s[0]} / 2과목 ${m.score.s[1]} / 3과목 ${m.score.s[2]}` : ''}</div>`;
+    card.innerHTML = `<div class="row"><h3>${r}회 모의고사</h3><span style="margin-left:auto">${status}</span></div><div class="bar"><i style="width:${m && m.done ? 100 : answered}%"></i></div><div class="small muted">총 100문제 · 120분${m && m.done ? ` · ${esc(m.at)} 응시 · 1과목 ${m.score.s[0]} / 2과목 ${m.score.s[1]} / 3과목 ${m.score.s[2]}` : ''}</div>`;
     const row = el('div', 'row');
     row.append(btn(m && m.done ? '다시 보기' : answered ? '이어 풀기' : '문제풀기', 'omr', () => m && m.done ? showMockResult(r) : startMock(r)));
     if (m && m.done) row.append(btn('결과보기', '', () => showMockResult(r)));
@@ -1109,6 +1124,100 @@ function showMockResult(r) {
   });
   v.append(list); window.scrollTo(0, 0);
 }
+
+/* ===== 화면 테마 (시스템·라이트·다크) ===== */
+const TH = 'tus-theme';
+function getTheme() { try { return localStorage.getItem(TH) || 'system'; } catch (e) { return 'system'; } }
+function applyTheme() { const t = getTheme(); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); document.querySelectorAll('[data-th]').forEach(b => b.setAttribute('aria-pressed', b.dataset.th === t ? 'true' : 'false')); }
+function setTheme(t) { try { localStorage.setItem(TH, t); } catch (e) { } applyTheme(); }
+document.addEventListener('click', e => { const b = e.target.closest('[data-th]'); if (b) setTheme(b.dataset.th); });
+const themeSeg = () => `<div class="seg" role="group" aria-label="화면 테마"><button type="button" data-th="system">시스템</button><button type="button" data-th="light">라이트</button><button type="button" data-th="dark">다크</button></div>`;
+
+/* ===== 기간별 학습플랜 ===== */
+const ORDER = ['MAC', 'DIV', 'EQ', 'BND', 'DRV', 'PERF', 'ANA', 'RSK', 'ALT', 'INT', 'PRD', 'RE', 'TAX', 'ETH', 'KFA', 'LAW'];
+const PLAN_OPTS = [14, 30, 45, 60, 90];
+const KIND = { study: ['학습', 'info'], review: ['복습', 'warn'], mock: ['모의고사', 'dark'], wrong: ['오답', 'warn'], round2: ['2회독', 'good'], final: ['정리', 'info'], exam: ['시험', 'dark'] };
+function genPlan(N, start) {
+  const finals = [{ kind: 'exam', text: '시험일 · 09:40 전 입실, 신분증·계산기 챙기기' }];
+  if (N >= 10) finals.unshift({ kind: 'final', text: '가벼운 정리 · 오답 카드만 훑고 일찍 자기' });
+  if (N >= 20) finals.unshift({ kind: 'final', text: '공식·숫자 총정리 (핵심노트 공식, 법규 숫자·기한)' });
+  const R = N - finals.length, S1 = Math.max(Math.min(R, 4), Math.round(R * (N <= 14 ? 0.55 : 0.6))), P = R - S1;
+  const every = N >= 30 ? 7 : 0, E = S1 - (every ? Math.floor(S1 / every) : 0);
+  const w = k => SUBS[k][2] + (GENS.some(g => g.sub === k) ? 2 : 0), W = ORDER.reduce((a, k) => a + w(k), 0);
+  const units = [];
+  if (E >= ORDER.length) {
+    const raw = ORDER.map(k => w(k) * E / W); const parts = raw.map(x => Math.max(1, Math.floor(x))); let sum = parts.reduce((a, b) => a + b, 0);
+    const rem = raw.map((x, i) => [x - Math.floor(x), i]).sort((a, b) => b[0] - a[0]); let j = 0;
+    while (sum < E) { parts[rem[j % rem.length][1]]++; sum++; j++; }
+    while (sum > E) { const i = parts.indexOf(Math.max(...parts)); parts[i]--; sum--; }
+    ORDER.forEach((k, i) => { for (let p = 1; p <= parts[i]; p++) units.push({ subs: [k], text: SUBS[k][0] + (parts[i] > 1 ? ` (${p}/${parts[i]})` : '') }); });
+  } else {
+    let cum = 0, cur = [];
+    ORDER.forEach((k, i) => { cur.push(k); cum += w(k); if ((units.length < E - 1 && cum >= (units.length + 1) * W / E - 0.5) || i === ORDER.length - 1) { units.push({ subs: cur, text: cur.map(x => SUBS[x][0]).join(' + ') }); cur = []; } });
+    while (units.length < E) units.push({ subs: [], text: '계산문제 집중 + 카드 복습', kind: 'review' });
+  }
+  const p1 = []; let ui = 0;
+  for (let i = 0; i < S1; i++) { if (every && (i + 1) % every === 0) p1.push({ kind: 'review', text: '주간 누적 복습 · 카드 + 오답노트 + 계산문제 10' }); else { const u = units[ui++]; p1.push({ kind: u.kind || 'study', text: u.text, subs: u.subs }); } }
+  const p2 = [];
+  if (P > 0) {
+    const M = Math.min(MOCK_ROUNDS, Math.max(P >= 2 ? 1 : 0, Math.floor(P / 3)));
+    const r2 = ['2회독: 3과목 운용(주식·채권·파생·분산·성과)', '2회독: 2과목(투자분석·리스크·대안·해외)', '2회독: 1과목(세제·금융상품·부동산)', '2회독: 3과목 법규(윤리·자본시장법·협회)', '계산문제 집중 (약한 유형 10문제 × 2)', '맞춤학습: 취약 세부과목 15문제'];
+    let ri = 0, mi = 1; const nb = M || 1, block = Math.floor(P / nb);
+    for (let b = 0; b < nb; b++) { const len = b === nb - 1 ? P - p2.length : block; for (let i = 0; i < len; i++) { if (M && i === 0) p2.push({ kind: 'mock', text: `모의고사 ${mi}회 (120분 실전)`, round: mi++ }); else if (M && i === 1) p2.push({ kind: 'wrong', text: `모의고사 ${mi - 1}회 오답 정리 → 카드·오답노트` }); else p2.push({ kind: 'round2', text: r2[ri++ % r2.length] }); } }
+  }
+  return p1.concat(p2, finals).map((x, i) => ({ ...x, d: addDays(start, i) }));
+}
+const PLAN0 = '2026-11-23';
+let _pc = { k: '', v: null };
+function planCfg() { return S.plan || { n: Math.max(5, daysBetween(PLAN0, S.examDate) + 1), start: PLAN0, fit: 1 }; }
+function curPlan() { const p = planCfg(), k = p.n + '|' + p.start; if (_pc.k !== k) _pc = { k, v: genPlan(p.n, p.start) }; return _pc.v; }
+function planItem(d) { return curPlan().find(x => x.d === d); }
+function subStart(k) { const it = curPlan().find(x => (x.subs || []).includes(k)); return it ? it.d : '0000-00-00'; }
+function guideHTML(short) {
+  return `<div class="guide"><h3>처음 외울 때 어디부터?</h3><ol>
+  <li><b>1순위 · 3과목 운용 (거시경제 → 분산투자 → 주식 → 채권 → 파생 → 성과분석)</b>3과목 50문항 중 31문항이 여기서 나오고, 2과목 투자분석·리스크관리를 이해하는 바탕입니다. 계산 공식도 대부분 여기서 처음 나옵니다.</li>
+  <li><b>2순위 · 2과목 (투자분석기법 → 리스크관리 → 대안투자 → 해외증권)</b>투자분석기법은 단일 세부과목 중 가장 많은 12문항입니다. 1순위에서 배운 CAPM·듀레이션이 그대로 쓰입니다.</li>
+  <li><b>3순위 · 1과목 상품 (금융상품 → 부동산)</b>이해 위주라 부담이 적고 점수를 지키기 좋습니다.</li>
+  <li><b>마지막 · 암기 과목 (세제 → 직무윤리 → 협회규정 → 자본시장법)</b>숫자·기한·비율은 빨리 외우면 빨리 잊습니다. 시험에 가까울 때 몰아서 외우고 카드로 반복하세요. 자본시장법은 11문항으로 비중이 큽니다.</li>
+  </ol>${short ? '<p class="small" style="margin:10px 0 0"><b>14일처럼 짧은 플랜이라면</b> 문항 수가 큰 자본시장법(11)·투자분석기법(12)·채권·파생부터 잡고, 과락선(1과목 8·2과목 12·3과목 20)을 먼저 넘기는 데 집중하세요.</p>' : ''}
+  <p class="small muted" style="margin:10px 0 0">하루 루틴: 핵심노트로 개념 읽기 → 카드 복습 → 연습문제 10 → 계산문제 10. 처음 일주일은 정답률보다 "공식을 말로 설명할 수 있는지"를 목표로 하세요.</p></div>`;
+}
+let planPick = null;
+function viewPlan(v) {
+  const cfg = planCfg(), days = curPlan(), d = today(), left = daysBetween(d, S.examDate) + 1, end = days[days.length - 1].d;
+  const done = Object.keys(S.planDone || {}).length;
+  head(v, '학습플랜', `${cfg.fit ? '기본 플랜(시험일 맞춤)' : cfg.n + '일 플랜'} · ${esc(cfg.start)} ~ ${esc(end)} · 완료 ${done}/${days.length}일`);
+  if (end !== S.examDate) v.insertAdjacentHTML('beforeend', `<div class="confirm"><span>플랜 마지막 날(${esc(end)})이 시험일(${esc(S.examDate)})과 다릅니다. 아래에서 '시험일에 끝나도록'을 고르면 날짜가 맞춰집니다.</span></div>`);
+  const ch = el('section', 'panel');
+  const rec = PLAN_OPTS.filter(n => n <= left).pop();
+  ch.innerHTML = `<h3>플랜 고르기</h3><p class="small muted" style="margin:0">시험일(${esc(S.examDate)})까지 오늘 포함 ${left}일 남았습니다.${rec ? ` 추천: <b>시험일 맞춤 ${left}일</b> 또는 <b>${rec}일 플랜</b>을 시험일에 끝나도록.` : ''}</p>`;
+  const pick = planPick || { n: cfg.fit ? 'fit' : cfg.n, mode: 'end' };
+  const c1 = el('div', 'choice');
+  [...PLAN_OPTS, 'fit'].forEach(n => { const b = btn(n === 'fit' ? `시험일 맞춤 ${left}일` : n + '일', '', () => { planPick = { ...pick, n }; render(); }); b.setAttribute('aria-pressed', String(pick.n === n)); c1.append(b); });
+  const c2 = el('div', 'choice');
+  [['end', '시험일에 끝나도록'], ['today', '오늘부터 시작']].forEach(([m, t]) => { const b = btn(t, '', () => { planPick = { ...pick, mode: m }; render(); }); b.setAttribute('aria-pressed', String(pick.mode === m)); if (pick.n === 'fit') b.disabled = true; c2.append(b); });
+  const N = pick.n === 'fit' ? left : pick.n, st = pick.n === 'fit' || pick.mode === 'end' ? addDays(S.examDate, -(N - 1)) : d;
+  const warn = st < d ? `<span class="pill bad">시작일 ${esc(st)}이 이미 지났습니다. 앞부분 일정은 건너뛰거나 '오늘부터 시작'을 고르세요.</span>` : '';
+  ch.append(c1, c2);
+  ch.insertAdjacentHTML('beforeend', `<div class="small">미리보기: <b>${N}일</b> · ${esc(st)} ~ ${esc(addDays(st, N - 1))} ${warn}</div>`);
+  ch.append(btn('이 플랜으로 바꾸기', 'primary', () => confirmBox2(ch, '일정과 카드가 열리는 날짜가 새로 계산됩니다. 풀이 기록은 그대로 남습니다.', '바꾸기', () => { S.plan = pick.n === 'fit' ? { n: N, start: st, fit: 1 } : { n: N, start: st }; S.planDone = {}; planPick = null; persist(); render(); })));
+  v.append(ch);
+  const g = el('section', 'panel'); g.innerHTML = guideHTML(cfg.n <= 20); v.append(g);
+  const sec = el('section', 'panel'); sec.innerHTML = '<h3>일정표</h3>';
+  const tw = el('div', 'tablewrap'); const tb = el('table', 'plantable'); tb.innerHTML = '<thead><tr><th>날짜</th><th>구분</th><th>할 일</th><th>완료</th></tr></thead>';
+  const body = el('tbody'); const dn = '일월화수목금토';
+  days.forEach((x, i) => {
+    const tr = el('tr', (x.d === d ? 'today ' : '') + ((S.planDone || {})[x.d] ? 'done' : ''));
+    const k = KIND[x.kind];
+    tr.innerHTML = `<td class="num small" style="white-space:nowrap">${x.d.slice(5)} (${dn[new Date(x.d + 'T00:00:00').getDay()]})<br><span class="muted">${i + 1}일차</span></td><td><span class="pill ${k[1]}">${k[0]}</span></td><td>${esc(x.text)}</td>`;
+    const td = el('td'); const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pd' + i; cb.checked = !!(S.planDone || {})[x.d]; cb.setAttribute('aria-label', x.d + ' 완료');
+    cb.onchange = () => { S.planDone = S.planDone || {}; if (cb.checked) S.planDone[x.d] = 1; else delete S.planDone[x.d]; persist(); tr.classList.toggle('done', cb.checked); };
+    td.append(cb); tr.append(td); body.append(tr);
+  });
+  tb.append(body); tw.append(tb); sec.append(tw); v.append(sec);
+  const t = tb.querySelector('tr.today'); if (t) setTimeout(() => { }, 0);
+}
+function confirmBox2(parent, msg, yes, onYes) { if (parent.querySelector('.confirm')) return; const c = el('div', 'confirm'); c.innerHTML = `<span>${esc(msg)}</span>`; c.append(btn(yes, 'primary', onYes), btn('취소', 'ghost', () => c.remove())); parent.append(c); }
 
 /* ===== 문제모음 ===== */
 function ring(p) { const r = 22, c = 2 * Math.PI * r; return `<svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="${r}" fill="none" stroke="var(--sunk)" stroke-width="6"/><circle cx="30" cy="30" r="${r}" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c * p / 100} ${c}" transform="rotate(-90 30 30)"/><text x="30" y="34" text-anchor="middle" style="fill:var(--warn);font-weight:600;font-size:12px">${p}%</text></svg>`; }
@@ -1216,7 +1325,7 @@ function noteDetail(v, k) {
 
 /* ===== 카드 복습 (간격반복 1·3·7·14일) ===== */
 const GAPS = [1, 2, 4, 7];
-function avail(c) { return S.unlockAll || SUBS[c[1]][3] <= today(); }
+function avail(c) { return S.unlockAll || subStart(c[1]) <= today(); }
 function dueCards() { const t = today(); return CARDS.filter(c => S.cards[c[0]] && S.cards[c[0]].st < 5 && S.cards[c[0]].due <= t); }
 function newCards() { return CARDS.filter(c => !S.cards[c[0]] && avail(c)); }
 function viewCards(v) {
@@ -1289,7 +1398,8 @@ function viewRecords(v) {
   const u = el('label', 'chk'); u.innerHTML = `<input id="ua" type="checkbox" ${S.unlockAll ? 'checked' : ''}> 카드 전체 열기 (학습계획 날짜와 상관없이)`; u.querySelector('input').onchange = e => { S.unlockAll = e.target.checked; persist(); };
   const g = el('div', 'row'); g.innerHTML = `<label class="small" for="gl">하루 목표 문제 수</label><input id="gl" type="number" min="5" max="300" step="5" value="${S.goal}" style="width:90px">`;
   g.querySelector('input').onchange = e => { const n = +e.target.value; if (n >= 5) { S.goal = n; persist(); } };
-  st.append(d, g, u);
+  const th = el('div', 'row'); th.innerHTML = '<span class="small">화면 테마</span>' + themeSeg(); th.lastChild.style.flex = '1'; th.lastChild.style.maxWidth = '320px';
+  st.append(d, g, u, th);
   st.insertAdjacentHTML('beforeend', `<p class="small muted" style="margin:0">저장 위치: ${mode === 'db' ? 'claude.ai 계정 (휴대폰·PC에서 같은 기록)' : '이 브라우저만 (claude.ai에 로그인한 상태로 열면 계정에 저장됩니다)'}</p><p class="small muted" style="margin:0">문제은행 ${BANKQ.length}문항 · 계산 유형 ${GENS.length}종 · 개념 카드 ${CARDS.length}장 · OX ${OXQ.length}문항. 모든 문항은 표준교재 범위를 직접 요약해 만든 것이며 기출 원문이 아닙니다. 세법·법규 수치는 최신 교재로 확인하세요.</p>`);
   if (mode !== 'db') {
     const bk = el('div', 'row');
@@ -1305,6 +1415,7 @@ function viewRecords(v) {
 }
 
 /* ===== 시작 ===== */
+applyTheme();
 render();
 connect();
 
