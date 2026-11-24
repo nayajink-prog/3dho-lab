@@ -145,6 +145,20 @@ a.link{color:var(--accent);font-weight:600;text-decoration:none}
 .plantable tr.done td:not(:last-child){color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent)}
 .plantable input{width:20px;height:20px;accent-color:var(--accent)}
 .choice{display:flex;flex-wrap:wrap;gap:8px}
+.pweek{border-top:1px solid var(--line);padding-top:6px}
+.pweek>summary{display:flex;gap:8px;align-items:center;cursor:pointer;padding:8px 2px;list-style:none}
+.pweek>summary::-webkit-details-marker{display:none}
+.pweek>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+.pweek[open]>summary::before{transform:rotate(90deg)}
+.pday{display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 6px;border-top:1px solid var(--line)}
+.pday.today{background:var(--accent-soft);border-radius:10px;border-top-color:transparent}
+.pdate{display:grid;gap:2px;line-height:1.2}.pdate b{font-size:15px}.pdate span{font-size:11px;color:var(--muted)}
+.ptext{line-height:1.55;overflow-wrap:break-word}
+.pday.done .ptext{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent)}
+.pacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pacts button{min-height:32px;padding:4px 11px;font-size:13px;border-radius:999px}
+.pcheck{display:grid;justify-items:center;gap:2px;font-size:11px;color:var(--muted);cursor:pointer}
+.pcheck input{width:24px;height:24px;accent-color:var(--accent);margin:0}
 .confirm span{flex:1 1 220px;min-width:0;overflow-wrap:anywhere}
 .panel,.panel *{overflow-wrap:break-word;word-break:keep-all}
 .pill{max-width:100%;white-space:normal}
@@ -2049,9 +2063,9 @@ function genPlan(N, start) {
   const p2 = [];
   if (P > 0) {
     const M = Math.min(MOCK_ROUNDS, Math.max(P >= 2 ? 1 : 0, Math.floor(P / 3)));
-    const r2 = ['2회독: 3과목 운용(주식·채권·파생·분산·성과)', '2회독: 2과목(투자분석·리스크·대안·해외)', '2회독: 1과목(세제·금융상품·부동산)', '2회독: 3과목 법규(윤리·자본시장법·협회)', '계산문제 집중 (약한 유형 10문제 × 2)', '맞춤학습: 취약 세부과목 15문제'];
+    const r2 = [{ t: '2회독: 3과목 운용(주식·채권·파생·분산·성과)', subs: ['EQ', 'BND', 'DRV', 'DIV', 'PERF', 'MAC'] }, { t: '2회독: 2과목(투자분석·리스크·대안·해외)', subs: ['ANA', 'RSK', 'ALT', 'INT'] }, { t: '2회독: 1과목(세제·금융상품·부동산)', subs: ['TAX', 'PRD', 'RE'] }, { t: '2회독: 3과목 법규(윤리·자본시장법·협회)', subs: ['ETH', 'LAW', 'KFA'] }, { t: '계산문제 집중 (약한 유형 10문제 × 2)', go: 'calc' }, { t: '맞춤학습: 취약 세부과목 15문제', go: 'focus' }];
     let ri = 0, mi = 1; const nb = M || 1, block = Math.floor(P / nb);
-    for (let b = 0; b < nb; b++) { const len = b === nb - 1 ? P - p2.length : block; for (let i = 0; i < len; i++) { if (M && i === 0) p2.push({ kind: 'mock', text: `모의고사 ${mi}회 (120분 실전)`, round: mi++ }); else if (M && i === 1) p2.push({ kind: 'wrong', text: `모의고사 ${mi - 1}회 오답 정리 → 카드·오답노트` }); else p2.push({ kind: 'round2', text: r2[ri++ % r2.length] }); } }
+    for (let b = 0; b < nb; b++) { const len = b === nb - 1 ? P - p2.length : block; for (let i = 0; i < len; i++) { if (M && i === 0) p2.push({ kind: 'mock', text: `모의고사 ${mi}회 (120분 실전)`, round: mi++ }); else if (M && i === 1) p2.push({ kind: 'wrong', text: `모의고사 ${mi - 1}회 오답 정리 → 카드·오답노트` }); else { const r = r2[ri++ % r2.length]; p2.push({ kind: 'round2', text: r.t, review: r.subs, go: r.go }); } } }
   }
   return p1.concat(p2, finals).map((x, i) => ({ ...x, d: addDays(start, i) }));
 }
@@ -2095,19 +2109,57 @@ function viewPlan(v) {
   ch.append(btn('이 플랜으로 바꾸기', 'primary', () => confirmBox2(ch, '일정과 카드가 열리는 날짜가 새로 계산됩니다. 풀이 기록은 그대로 남습니다.', '바꾸기', () => { S.plan = pick.n === 'fit' ? { n: N, start: st, fit: 1 } : { n: N, start: st }; S.planDone = {}; planPick = null; persist(); render(); })));
   v.append(ch);
   const g = el('section', 'panel'); g.innerHTML = guideHTML(cfg.n <= 20); v.append(g);
-  const sec = el('section', 'panel'); sec.innerHTML = '<h3>일정표</h3>';
-  const tw = el('div', 'tablewrap'); const tb = el('table', 'plantable'); tb.innerHTML = '<thead><tr><th>날짜</th><th>구분</th><th>할 일</th><th>완료</th></tr></thead>';
-  const body = el('tbody'); const dn = '일월화수목금토';
-  days.forEach((x, i) => {
-    const tr = el('tr', (x.d === d ? 'today ' : '') + ((S.planDone || {})[x.d] ? 'done' : ''));
-    const k = KIND[x.kind];
-    tr.innerHTML = `<td class="num small" style="white-space:nowrap">${x.d.slice(5)} (${dn[new Date(x.d + 'T00:00:00').getDay()]})<br><span class="muted">${i + 1}일차</span></td><td><span class="pill ${k[1]}">${k[0]}</span></td><td>${esc(x.text)}</td>`;
-    const td = el('td'); const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pd' + i; cb.checked = !!(S.planDone || {})[x.d]; cb.setAttribute('aria-label', x.d + ' 완료');
-    cb.onchange = () => { S.planDone = S.planDone || {}; if (cb.checked) S.planDone[x.d] = 1; else delete S.planDone[x.d]; persist(); tr.classList.toggle('done', cb.checked); };
-    td.append(cb); tr.append(td); body.append(tr);
-  });
-  tb.append(body); tw.append(tb); sec.append(tw); v.append(sec);
-  const t = tb.querySelector('tr.today'); if (t) setTimeout(() => { }, 0);
+  const sec = el('section', 'panel');
+  const hd = el('div', 'row'); hd.innerHTML = '<h3>일정표</h3><span class="small muted">버튼을 누르면 그날 공부로 바로 갑니다</span>';
+  const todayBtn = btn('오늘 일정으로 이동', '', () => { const t = sec.querySelector('.pday.today'); if (t) { const w = t.closest('details'); if (w) w.open = true; t.scrollIntoView({ block: 'center', behavior: 'smooth' }); } });
+  todayBtn.style.marginLeft = 'auto'; if (days.some(x => x.d === d)) hd.append(todayBtn); sec.append(hd);
+  const dn = '일월화수목금토';
+  for (let w = 0; w * 7 < days.length; w++) {
+    const wk = days.slice(w * 7, w * 7 + 7), last = wk[wk.length - 1].d, doneN = wk.filter(x => (S.planDone || {})[x.d]).length;
+    const box = el('details', 'pweek'); box.open = last >= d;
+    box.innerHTML = `<summary><b>${w + 1}주차</b> <span class="small muted num">${wk[0].d.slice(5).replace('-', '/')} ~ ${last.slice(5).replace('-', '/')}</span><span class="small muted" style="margin-left:auto">완료 ${doneN}/${wk.length}</span></summary>`;
+    wk.forEach((x, j) => {
+      const i = w * 7 + j, k = KIND[x.kind], isDone = !!(S.planDone || {})[x.d];
+      const row = el('div', 'pday' + (x.d === d ? ' today' : '') + (isDone ? ' done' : ''));
+      row.innerHTML = `<div class="pdate num"><b>${+x.d.slice(5, 7)}/${+x.d.slice(8, 10)}</b><span>${dn[new Date(x.d + 'T00:00:00').getDay()]}요일</span><span>${i + 1}일차</span></div>`;
+      const mid = el('div', 'pmid'); mid.innerHTML = `<div class="ptext"><span class="pill ${k[1]}">${k[0]}</span> ${esc(x.text)}</div>`;
+      const acts = planActions(x); if (acts.childNodes.length) mid.append(acts);
+      const ck = el('label', 'pcheck'); const cb = el('input'); cb.type = 'checkbox'; cb.id = 'pd' + i; cb.checked = isDone; cb.setAttribute('aria-label', x.d + ' 완료');
+      cb.onchange = () => { S.planDone = S.planDone || {}; if (cb.checked) S.planDone[x.d] = 1; else delete S.planDone[x.d]; persist(); row.classList.toggle('done', cb.checked); };
+      ck.append(cb); ck.insertAdjacentHTML('beforeend', '<span>완료</span>');
+      row.append(mid, ck); box.append(row);
+    });
+    sec.append(box);
+  }
+  v.insertBefore(sec, ch);
+  const h3 = ch.querySelector('h3'); if (h3) h3.textContent = '플랜·시험일 바꾸기';
+}
+/* 일정 항목 → 해당 공부로 바로 가기 */
+function chip(t, f, primary) { const b = btn(t, primary ? 'primary' : '', f); return b; }
+function practiceMix(subs, title) {
+  const qs = [];
+  subs.forEach(k => { const p = S.prac[k] || { done: {} }; const pool = bySub(k); const pick = shuffle(pool.filter(q => p.done[q.id] !== 1)).concat(shuffle(pool.filter(q => p.done[q.id] === 1))).slice(0, subs.length > 4 ? 2 : 3); pick.forEach(q => qs.push(presentBank(q))); if (GENS.some(g => g.sub === k) && subs.length <= 4) qs.push(calcFor(k)); });
+  startRun('prac', shuffle(qs), { title, again: () => practiceMix(subs, title) });
+}
+function planActions(x) {
+  const a = el('div', 'pacts'), short = k => SUBS[k][0].split('/')[0].replace('투자운용', '').replace('관련 ', '');
+  if (x.kind === 'study' && x.subs && x.subs.length) {
+    x.subs.forEach(k => { a.append(chip(`${short(k)} 노트`, () => go('notes-' + k.toLowerCase())), chip(`${short(k)} 문제`, () => startPractice(k), true)); });
+    const calcs = GENS.filter(g => x.subs.includes(g.sub)); if (calcs.length) a.append(chip('계산 연습', () => startRun('calc', Array.from({ length: 5 }, () => buildCalc(calcs[Math.floor(Math.random() * calcs.length)])), { title: '오늘 범위 계산', again: () => go('plan') })));
+  } else if (x.kind === 'study' || x.kind === 'review') {
+    a.append(chip('카드 복습', () => go('cards'), true), chip('오답노트', () => go('wrong')), chip('계산 10문제', () => startRun('calc', Array.from({ length: 10 }, () => buildCalc(GENS[Math.floor(Math.random() * GENS.length)])), { title: '계산 랜덤', again: () => go('plan') })));
+  } else if (x.kind === 'mock') {
+    a.append(chip(`모의고사 ${x.round}회 시작`, () => { startMock(x.round); window.scrollTo(0, 0); }, true), chip('모의고사 목록', () => go('mock')));
+  } else if (x.kind === 'wrong') {
+    a.append(chip('오답 다시 풀기', () => go('wrong'), true), chip('카드 복습', () => go('cards')), chip('맞춤학습', () => go('focus')));
+  } else if (x.kind === 'round2') {
+    if (x.review) a.append(chip('범위 문제 풀기', () => practiceMix(x.review, x.text), true), chip('빈칸 채우기', () => go('fill')), chip('핵심노트', () => go('notes')));
+    else if (x.go === 'calc') a.append(chip('약한 유형 계산', () => go('calc'), true), chip('계산 입문', () => go('intro')));
+    else if (x.go === 'focus') a.append(chip('맞춤학습', () => go('focus'), true), chip('오답노트', () => go('wrong')));
+  } else if (x.kind === 'final') {
+    a.append(chip('핵심노트', () => go('notes'), true), chip('공식·기호 사전', () => go('intro')), chip('★ 카드', () => go('cards')));
+  }
+  return a;
 }
 function confirmBox2(parent, msg, yes, onYes) { if (parent.querySelector('.confirm')) return; const c = el('div', 'confirm'); c.innerHTML = `<span>${esc(msg)}</span>`; c.append(btn(yes, 'primary', onYes), btn('취소', 'ghost', () => c.remove())); parent.append(c); }
 
